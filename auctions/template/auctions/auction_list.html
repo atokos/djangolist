@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2>List of all currently active auctions:</h2>
+
+{% for auction in auctions_list %}
+    <div id="list-item">
+        <a href="{% url 'auctions:detail' auction.id %}"><h2>{{ auction.title }}</h2></a>
+        <p>{{ auction.user }}</p>
+        <p>{{ aution.description }}</p>
+        <p>{{ auction.deadline }}</p>
+    </div>
+{% endfor %}
+{% endblock %}
