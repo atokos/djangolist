@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for auction in auction_list %}
+    <h2>{{ auction.title }}</h2>
+    <p>{{ auction.user }}</p>
+    <p>{{ aution.description }}</p>
+    <p>{{ auction.deadline }}</p>
+{% endfor %}
+{% endblock %}
