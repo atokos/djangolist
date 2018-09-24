@@ -8,3 +8,6 @@ class Auction(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     deadline = models.DateTimeField(default=datetime.datetime.now()+datetime.timedelta(hours=72))
+
+    def __str__(self):
+        return self.title
