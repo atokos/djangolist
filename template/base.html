@@ -1,13 +1,17 @@
+{%  load static from staticfiles %}
+
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Djangolist</title>
-</head>
-<body>
-    <a href="{% url 'homepage' %}"><h1>Djangolist</h1></a>
-    <div id="content">
-        {% block content %}
-        {% endblock %}
-    </div>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>Djangolist</title>
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+    </head>
+    <body>
+        <a href="{% url 'homepage' %}"><h1>Djangolist</h1></a>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
 </html>
