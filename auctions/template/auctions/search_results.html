@@ -2,10 +2,12 @@
 
 {% block content %}
 
-    <a href="{% url 'auctions:search_page' %}">Search page</a>
-    <h2>List of all currently active auctions:</h2>
+    <a href="{% url 'auctions:search_page' %}">Back to search page</a>
+    <a href="{% url 'auctions:list' %}">Back to auction list</a>
 
-{% for auction in auctions %}
+    <h2>Auctions matching the search: "{{ query }}"</h2>
+
+{% for auction in results %}
     <div class="auction">
         <a href="{% url 'auctions:detail' auction_id=auction.id %}"><h2>{{ auction.title }}</h2></a>
         <p>Seller: {{ auction.user }}</p>
