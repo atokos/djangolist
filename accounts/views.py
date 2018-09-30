@@ -23,10 +23,13 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('homepage')
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('homepage')
     else:
         form = AuthenticationForm()
-    context = {'form': form}
+        context = {'form': form}
     return render(request, 'accounts/login.html', context)
 
 
