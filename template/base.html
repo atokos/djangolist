@@ -8,7 +8,15 @@
         <link rel="stylesheet" href="{% static 'style.css' %}">
     </head>
     <body>
-        <a href="{% url 'homepage' %}"><h1>Djangolist</h1></a>
+        <div id="navbar">
+            <h1><a href="{% url 'homepage' %}">Djangolist</a></h1>
+            {% block navbar %}
+                <li><a href="{% url 'login'  %}">Login</a></li>
+                <li><a href="{% url 'logout'  %}">Logout</a></li>
+                <li><a href="{% url 'auctions:list'  %}">Auctions</a></li>
+                <li><a href="{% url 'auctions:search_page' %}">Search</a></li>
+            {% endblock %}
+        </div>
         <div id="content">
             {% block content %}
             {% endblock %}
