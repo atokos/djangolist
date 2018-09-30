@@ -29,7 +29,7 @@ def login_view(request):
                 return redirect('homepage')
     else:
         form = AuthenticationForm()
-        context = {'form': form}
+    context = {'form': form}
     return render(request, 'accounts/login.html', context)
 
 
