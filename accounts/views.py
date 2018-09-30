@@ -1,10 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-
-
-def profile_view(request):
-    return render(request, 'accounts/profile.html')
-
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 def signup_view(request):
 
@@ -16,5 +11,24 @@ def signup_view(request):
             return redirect('homepage')
     else:
         form = UserCreationForm()
-        context = {'form': form}
+    context = {'form': form}
     return render(request, 'accounts/signup.html', context)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        pass
+
+    else:
+        form = AuthenticationForm()
+    context = {'form': form}
+    return render(request, 'accounts/login.html', context)
+
+
+def logout_view(request):
+    render(request, 'accounts/logout')
+
+
+def profile_view(request):
+    return render(request, 'accounts/profile.html')
+
