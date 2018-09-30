@@ -26,7 +26,7 @@ def login_view(request):
 
 
 def logout_view(request):
-    render(request, 'accounts/logout')
+    return render(request, 'accounts/logout.html')
 
 
 def profile_view(request):
