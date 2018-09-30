@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
-from auctions.models import Auction
+from .models import Auction
 from .forms import AuctionSearchForm
+from django.contrib.auth.decorators import login_required
 
 
 def auction_list(request):
@@ -15,13 +16,22 @@ def auction_detail(request, auction_id):
     return render(request, 'auctions/auction_details.html', context)
 
 
+@login_required()
+def auction_create(request):
+    return render(request, 'auctions/auction_create.html')
+
+
+@login_required()
+def auction_bid(request, amount):
+    pass
+
+
 def search_page(request):
     form = AuctionSearchForm()
     return render(request, 'auctions/search_page.html', {'form': form})
 
 
 def search_result(request):
-
     query = request.GET.__getitem__('q')
     results = get_list_or_404(Auction, title__icontains=query, state='ACTIVE')
     context = {'results': results,
@@ -29,7 +39,4 @@ def search_result(request):
     return render(request, 'auctions/search_results.html', context)
 
 
-# TODO bid method
-def auction_bid(request, amount):
-    pass
 
