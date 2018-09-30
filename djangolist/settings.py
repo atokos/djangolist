@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'auctions',
-    'users',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'djangolist.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['template', 'auctions/template'],
+        'DIRS': ['template', 'auctions/template', 'accounts/template'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
