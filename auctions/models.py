@@ -15,7 +15,7 @@ class Auction(models.Model):
                      (ADJUDICATED, 'ADJUDICATED'),
                      )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
