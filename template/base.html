@@ -8,15 +8,22 @@
         <link rel="stylesheet" href="{% static 'style.css' %}">
     </head>
     <body>
-        <div id="navbar">
+        <header>
             <h1><a href="{% url 'homepage' %}">Djangolist</a></h1>
-            {% block navbar %}
-                <li><a href="{% url 'accounts:login'  %}">Login</a></li>
-                <li><a href="{% url 'accounts:logout'  %}">Logout</a></li>
-                <li><a href="{% url 'auctions:list'  %}">Auctions</a></li>
-                <li><a href="{% url 'auctions:search_page' %}">Search</a></li>
-            {% endblock %}
-        </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                    <li>
+                        <form action="{% url 'accounts:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
+                    <li><a href="{% url 'auctions:list'  %}">Auctions</a></li>
+                    <li><a href="{% url 'auctions:search_page' %}">Search</a></li>
+                </ul>
+            </nav>
+        <header>
         <div id="content">
             {% block content %}
             {% endblock %}
