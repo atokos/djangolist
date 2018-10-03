@@ -21,12 +21,23 @@ class CreateAuctionForm(forms.ModelForm):
             raise forms.ValidationError("The price must be a positive number that is not 0.")
         return price
 
-    # Validation for the deadline, should be min. 72h from creation
     def clean_deadline(self):
         deadline = self.cleaned_data.get('deadline')
         if not deadline > (timezone.now() + timedelta(hours=72)):
             raise forms.ValidationError("This deadline is too soon, the minimum is 72h from now.")
         return deadline
+
+
+class BidOnAuctionForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Bid
+        fields = ['amount']
+
+    def clean_amount(self):
+        amount = self.cleaned_data.get('amount')
+        if not amount >= 0.01:
+            raise forms.ValidationError("The minimum bid amount is 0.01.")
 
 
 

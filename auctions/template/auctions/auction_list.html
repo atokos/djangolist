@@ -4,7 +4,7 @@
     <h2>List of all currently active auctions:</h2>
 {% for auction in auctions %}
     <div class="auction">
-        <a href="{% url 'auctions:detail' pk %}"><h2>{{ auction.title }}</h2></a>
+        <a href="{% url 'auctions:detail' id=id %}"><h2>{{ auction.title }}</h2></a>
         <p>Seller: {{ auction.user }}</p>
         <p>{{ auction.short_desc }}</p>
         <p>Price: {{ auction.price }}</p>
