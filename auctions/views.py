@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
-from .models import Auction
 from django.contrib.auth.decorators import login_required
-from .forms import AuctionSearchForm, CreateArticleForm
+
+from .models import Auction
+from .forms import AuctionSearchForm, CreateAuctionForm
 
 
 def auction_list(request):
@@ -19,14 +20,14 @@ def auction_detail(request, auction_id):
 @login_required()
 def auction_create(request):
     if request.method == 'POST':
-        form = CreateArticleForm(request.POST)
+        form = CreateAuctionForm(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
             return redirect('auctions:list')
     else:
-        form = CreateArticleForm()
+        form = CreateAuctionForm()
     context = {'form': form}
     return render(request, 'auctions/auction_create.html', context)
 

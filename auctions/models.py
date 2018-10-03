@@ -19,7 +19,7 @@ class Auction(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    deadline = models.DateTimeField(default=datetime.datetime.now() + datetime.timedelta(hours=72))
+    deadline = models.DateTimeField()
     state = models.CharField(max_length=12, choices=STATE_CHOICES, default=ACTIVE)
 
     def __str__(self):
