@@ -4,7 +4,7 @@
     <h2>Auctions matching the search: "{{ query }}"</h2>
 {% for auction in results %}
     <div class="auction">
-        <a href="{% url 'auctions:detail' auction_id=auction.id %}"><h2>{{ auction.title }}</h2></a>
+        <a href="{% url 'auctions:detail' pk %}"><h2>{{ auction.title }}</h2></a>
         <p>Seller: {{ auction.user }}</p>
         <p>{{ auction.short_desc }}</p>
         <p>Price: {{ auction.price }}</p>

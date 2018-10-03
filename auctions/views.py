@@ -11,8 +11,8 @@ def auction_list(request):
     return render(request, 'auctions/auction_list.html', context)
 
 
-def auction_detail(request, auction_id):
-    auction = get_object_or_404(Auction, pk=auction_id)
+def auction_detail(request, pk):
+    auction = get_object_or_404(Auction, pk=pk)
     context = {'auction': auction}
     return render(request, 'auctions/auction_details.html', context)
 
