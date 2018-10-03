@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import timedelta
 
 
 class Auction(models.Model):
@@ -26,3 +27,7 @@ class Auction(models.Model):
         old_bidder = self.latest_bidder
         self.latest_bidder = new_bidder
         return old_bidder
+
+    def check_deadline(self, time):
+        if (self.deadline - time) <= timedelta(minutes=5):
+            self.deadline += timedelta(minutes=5)

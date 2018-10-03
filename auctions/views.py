@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from decimal import *
 
 from .models import Auction
 from .forms import AuctionSearchForm, CreateAuctionForm, BidOnAuctionForm
@@ -18,7 +19,8 @@ def auction_detail(request, auction_id):
         form = BidOnAuctionForm(request.POST)
         if form.is_valid():
             bid_amount = form.cleaned_data['amount']    # Retrieve form data
-            if bid_amount >= auction.price + 0.01:      # Validate
+            if bid_amount >= auction.price + Decimal(0.01):      # Validate
+                # TODO fix 0.01 problem
                 auction.price = bid_amount              # Update the price of auction
                 auction.check_deadline(timezone.now())      # Check if the soft deadline is met
                 # Register the new latest bidder in the auction model

@@ -9,10 +9,10 @@
         <p>Deadline: {{ auction.deadline }}</p>
         {% if user.is_authenticated %}
             <form method="post" action="{% url 'auctions:detail' auction_id=auction.id %}">
+                {% csrf_token %}
                 {{ form }}
                 <input type="submit" value="Bid">
             </form>
-            {{ form }}
         {% endif %}
     </div>
 
