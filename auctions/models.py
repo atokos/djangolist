@@ -8,7 +8,8 @@ class Auction(models.Model):
                      ('DUE', 'DUE'),
                      ('ADJUDICATED', 'ADJUDICATED'),
                      )
-    user = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='auction-seller+', default=None, on_delete=models.CASCADE)
+    latest_bidder = models.ForeignKey(User, related_name='auction-bidder+', default=None, null=True, on_delete=models.SET_DEFAULT)
     title = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
@@ -21,11 +22,7 @@ class Auction(models.Model):
     def short_desc(self):
         return self.description[:500]
 
-
-class Bid(models.Model):
-    user = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
-    auction = models.ForeignKey(Auction, default=None, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=8, decimal_places=2)
-
-    def __str__(self):
-        return self.amount
+    def set_latest_bidder(self, new_bidder):
+        old_bidder = self.latest_bidder
+        self.latest_bidder = new_bidder
+        return old_bidder

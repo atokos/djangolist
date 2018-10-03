@@ -28,16 +28,9 @@ class CreateAuctionForm(forms.ModelForm):
         return deadline
 
 
-class BidOnAuctionForm(forms.ModelForm):
-
-    class Meta:
-        model = models.Bid
-        fields = ['amount']
-
-    def clean_amount(self):
-        amount = self.cleaned_data.get('amount')
-        if not amount >= 0.01:
-            raise forms.ValidationError("The minimum bid amount is 0.01.")
+class BidOnAuctionForm(forms.Form):
+    amount = forms.DecimalField(max_digits=8, decimal_places=2, required=True)
+    timestamp = forms.DateTimeField()
 
 
 
