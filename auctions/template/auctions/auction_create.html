@@ -3,6 +3,8 @@
 {% block content %}
     <div id="create-article">
         <h2>Create a new auction</h2>
+        <p> The expected format for the deadline is "yyyy-mm-dd hh:mm:ss"</p>
+        <p> The expexted format for the deadline is deadline has to be at least 72h from now</p>
         <form action="{% url 'auctions:create' %}" method="post">
             {% csrf_token %}
             {{ form }}
