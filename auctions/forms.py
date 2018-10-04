@@ -5,10 +5,10 @@ from django.utils import timezone
 
 
 class AuctionSearchForm(forms.Form):
-    q = forms.CharField(label="Title", max_length=100)
+    title = forms.CharField(label="Title", max_length=100)
 
 
-class CreateAuctionForm(forms.ModelForm):
+class AuctionCreateForm(forms.ModelForm):
     deadline = forms.DateTimeField(widget=forms.DateTimeInput)
 
     class Meta:

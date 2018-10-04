@@ -1,16 +1,42 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.views import View
 from decimal import *
 
 from .models import Auction
-from .forms import AuctionSearchForm, CreateAuctionForm, BidOnAuctionForm
+from .forms import AuctionSearchForm, AuctionCreateForm, BidOnAuctionForm
 
 
-def auction_list(request):
+class AuctionListView(View):
+    form_class = AuctionSearchForm
+    template_name = 'auctions/auction_list.html'
+
+    search_form = AuctionSearchForm()
+    create_form = AuctionCreateForm()
     auctions = Auction.objects.filter(state='ACTIVE').order_by('deadline')
-    context = {'auctions': auctions}
-    return render(request, 'auctions/auction_list.html', context)
+
+    context = {'auctions': auctions,
+               'search_form': search_form,
+               'create_form': create_form,
+               }
+
+    def get(self, request):
+        if 'title' in request.GET:
+            title = request.GET['title']
+            results = get_list_or_404(Auction, title__icontains=title, state='ACTIVE')
+            self.context['auctions'] = results
+            self.context['title'] = title
+        return render(request, self.template_name, self.context)
+
+    def post(self, request):
+        form = AuctionCreateForm(request.POST)
+        if form.is_valid():
+            auction = form.save(commit=False)
+            auction.user = request.user
+            auction.save()
+            return redirect('auctions:list')
+        return render(request, self.template_name, self.context)
 
 
 def auction_detail(request, auction_id):
@@ -35,39 +61,6 @@ def auction_detail(request, auction_id):
     context = {'auction': auction,
                'form': form}
     return render(request, 'auctions/auction_details.html', context)
-
-
-@login_required()
-def auction_create(request):
-    if request.method == 'POST':
-        form = CreateAuctionForm(request.POST)
-        if form.is_valid():
-            auction = form.save(commit=False)
-            auction.user = request.user
-            auction.save()
-            return redirect('auctions:list')
-    else:
-        form = CreateAuctionForm()
-    context = {'form': form}
-    return render(request, 'auctions/auction_create.html', context)
-
-
-@login_required()
-def auction_bid(request, amount):
-    pass
-
-
-def search_page(request):
-    form = AuctionSearchForm()
-    return render(request, 'auctions/search_page.html', {'form': form})
-
-
-def search_result(request):
-    query = request.GET.__getitem__('q')
-    results = get_list_or_404(Auction, title__icontains=query, state='ACTIVE')
-    context = {'results': results,
-               'query': query}
-    return render(request, 'auctions/search_results.html', context)
 
 
 

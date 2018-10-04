@@ -24,11 +24,7 @@
                     <li><a href="{% url 'accounts:login' %}">Login</a></li>
                     <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
                     {% endif %}
-                    <li><a href="{% url 'auctions:list'  %}">Auctions</a></li>
-                    <li><a href="{% url 'auctions:search_page' %}">Search</a></li>
-                    {% if user.is_authenticated %}
-                        <li><a href="{% url 'auctions:create'  %}">Create new auction</a></li>
-                    {% endif %}
+                    <li><a href="{% url 'auctions:list'  %}">Browse auctions</a></li>
                 </ul>
             </nav>
         <header>
