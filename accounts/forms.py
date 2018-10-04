@@ -28,4 +28,6 @@ class EditEmailForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = {'email'}
+        fields = {'email',
+                  'password',
+                  }

@@ -1,14 +1,45 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
-from django.views.generic import UpdateView
+from django.views import View
 
 from .forms import SignupForm, EditEmailForm
 
 
-class AccountEditEmailView(UpdateView):
-    pass
+class AccountChangeEmailView(View):
+    template_name = 'accounts/change_email.html'
+
+    def post(self, request):
+        form = EditEmailForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:profile')
+
+    def get(self, request):
+        form = EditEmailForm(instance=request.user)
+        return render(request, self.template_name, {'form': form})
+
+
+class AccountProfileView(View):
+    template_name = 'accounts/profile.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class AccountChangePasswordView(View):
+    template_name = 'accounts/change_password.html'
+
+    def post(self, request):
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:profile')
+
+    def get(self, request):
+        form = PasswordChangeForm(user=request.user)
+        return render(request, self.template_name, {'form': form})
 
 
 def signup_view(request):
