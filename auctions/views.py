@@ -99,7 +99,7 @@ class AuctionEditView(View):
         if not auction.user == request.user:
             return HttpResponseForbidden
         else:
-            form = AuctionEditForm(initial={'description': auction.description})
+            form = AuctionEditForm(instance=auction)
             context = {'form': form,
                        'auction': auction}
             return render(request, self.template_name, context)
