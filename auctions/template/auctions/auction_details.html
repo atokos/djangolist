@@ -8,6 +8,7 @@
         <p>Price: {{ auction.price }}</p>
         <p>Deadline: {{ auction.deadline }}</p>
         {% if user.is_authenticated %}
+            <p>{{ error }}</p>
             <form method="post" action="{% url 'auctions:detail' auction_id=auction.id %}">
                 {% csrf_token %}
                 {{ form }}
@@ -15,5 +16,4 @@
             </form>
         {% endif %}
     </div>
-
 {% endblock %}

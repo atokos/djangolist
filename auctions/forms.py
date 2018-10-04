@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ValidationError
 from . import models
 from datetime import timedelta
 from django.utils import timezone
@@ -30,6 +31,7 @@ class AuctionCreateForm(forms.ModelForm):
 
 class BidOnAuctionForm(forms.Form):
     amount = forms.DecimalField(max_digits=8, decimal_places=2, required=True)
+
 
 
 

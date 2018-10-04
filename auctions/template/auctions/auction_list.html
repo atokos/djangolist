@@ -5,16 +5,8 @@
         <h2>Search for auctions by title:</h2>
         <form action="{% url 'auctions:list' %}" method="get">
             {% csrf_token %}
-            {{ search_form.as_p }}
+            {{ form.as_p }}
             <input type="submit" value="Search"><br>
-        </form>
-        <h2>Create a new auction</h2>
-        <p> The expected format for the deadline is "yyyy-mm-dd hh:mm:ss"</p>
-        <p> The expected format for the deadline is deadline has to be at least 72h from now</p>
-        <form action="{% url 'auctions:list' %}" method="post">
-            {% csrf_token %}
-            {{ create_form.as_p }}
-            <input type="submit" value="Create">
         </form>
     {% endif %}
     {% if request.GET.title %}
