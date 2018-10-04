@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Edit {{ auction.title }}</h2>
+    <p>{{ error }}</p>
+    <form method="post" action="{% url 'auctions:edit' auction_id=auction.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

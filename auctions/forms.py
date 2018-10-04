@@ -10,7 +10,6 @@ class AuctionSearchForm(forms.Form):
 
 
 class AuctionCreateForm(forms.ModelForm):
-    deadline = forms.DateTimeField(widget=forms.DateTimeInput)
 
     class Meta:
         model = models.Auction
@@ -27,6 +26,20 @@ class AuctionCreateForm(forms.ModelForm):
         if not deadline > (timezone.now() + timedelta(hours=72)):
             raise forms.ValidationError("This deadline is too soon, the minimum is 72h from now.")
         return deadline
+
+
+class AuctionEditForm(forms.ModelForm):
+    class Meta:
+        model = models.Auction
+        fields = ['description']
+
+    def save(self, commit=True):
+        auction = super(AuctionEditForm, self).save(commit=False)
+        auction.description = self.cleaned_data['description']
+
+        if commit:
+            auction.save()
+        return auction
 
 
 class BidOnAuctionForm(forms.Form):

@@ -5,10 +5,12 @@
         <h2> {{ auction.title }}</h2>
         <p>Seller: {{ auction.user }}</p>
         <p>Description: {{ auction.description }}</p>
+        {%  if auction.user == request.user %}
+            <br><a href="{% url 'auctions:edit' auction_id=auction.id %}">Edit description</a>
+        {% endif %}
         <p>Price: {{ auction.price }}</p>
         <p>Deadline: {{ auction.deadline }}</p>
         {% if user.is_authenticated %}
-            <p>{{ error }}</p>
             <form method="post" action="{% url 'auctions:detail' auction_id=auction.id %}">
                 {% csrf_token %}
                 {{ form }}
