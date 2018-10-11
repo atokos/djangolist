@@ -29,24 +29,19 @@ class AuctionListView(View):
 
 class AuctionCreateView(View):
     template_name = 'auctions/auction_create.html'
-    form = AuctionCreateForm()
-
-    context = {
-        'form': form
-    }
 
     def post(self, request):
-        form = AuctionCreateForm(request.POST)
+        form = AuctionCreateForm(request.POST, seller=request.user)
         if form.is_valid():
-            auction = form.save(commit=False)
-            auction.user = request.user
-            auction.save()
+            auction = form.save()
             return redirect('auctions:detail', auction_id=auction.id)
         else:
-            return render(request, self.template_name, self.context)
+            form = AuctionCreateForm(seller=request.user)
+            return render(request, self.template_name, {'form': form})
 
     def get(self, request):
-        return render(request, self.template_name, self.context)
+        form = AuctionCreateForm(seller=request.user)
+        return render(request, self.template_name, {'form': form})
 
 
 class AuctionDetailView(View):

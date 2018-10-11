@@ -15,10 +15,14 @@ class AuctionCreateForm(forms.ModelForm):
         model = models.Auction
         fields = ['title', 'description', 'minimum_bid', 'deadline']
 
+    def __init__(self, *args, **kwargs):
+        self.seller = kwargs.pop('seller')
+        super(AuctionCreateForm, self).__init__(*args, *kwargs)
+
     def clean_minimum_bid(self):
         minimum_bid = self.cleaned_data.get('minimum_bid')
         if not minimum_bid > 0:
-            raise forms.ValidationError("The price must be a positive number that is not 0.")
+            raise forms.ValidationError("The price must be a positive number greater than zero.")
         return minimum_bid
 
     def clean_deadline(self):
@@ -26,6 +30,13 @@ class AuctionCreateForm(forms.ModelForm):
         if not deadline > (timezone.now() + timedelta(hours=72)):
             raise forms.ValidationError("This deadline is too soon, the minimum is 72h from now.")
         return deadline
+
+    def save(self, commit=True):
+        auction = super(AuctionCreateForm, self).save(commit=False)
+        auction.seller = self.seller
+        if commit:
+            auction.save()
+        return auction
 
 
 class AuctionEditForm(forms.ModelForm):
@@ -36,7 +47,6 @@ class AuctionEditForm(forms.ModelForm):
     def save(self, commit=True):
         auction = super(AuctionEditForm, self).save(commit=False)
         auction.description = self.cleaned_data['description']
-
         if commit:
             auction.save()
         return auction
