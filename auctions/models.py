@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from decimal import Decimal
 
 
 class AuctionManager(models.Manager):
@@ -26,18 +28,12 @@ class Auction(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
-    seller = models.ForeignKey(User, related_name='auction-seller+',
-                               default=None, on_delete=models.CASCADE)
+    seller = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     minimum_bid = models.DecimalField(max_digits=8, decimal_places=2)
     deadline = models.DateTimeField()
 
     banned = models.BooleanField(default=False)
     due = models.BooleanField(default=False)
-
-    current_bidder = models.ForeignKey(User, related_name='auction-bidder+',
-                                       default=None, on_delete=models.SET_DEFAULT)
-    current_bid = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
-    bidders = models.ManyToManyField(User, blank=True)
 
     objects = AuctionManager()
 
@@ -50,13 +46,32 @@ class Auction(models.Model):
     def is_active(self):
         return not self.banned and not self.due
 
-    def set_latest_bidder(self, new_bidder):
-        old_bidder = self.latest_bidder
-        self.latest_bidder = new_bidder
-        return old_bidder
+    def get_latest_bid(self):
+        if not self.bid_set.all():
+            return None
+        return self.bid_set.all().latest('bid')
 
-    # def check_deadline(self, time):
-    #    if (self.deadline - time) <= timezone.timedelta(minutes=5):
-    #        self.deadline += timezone.timedelta(minutes=5)
+    def get_latest_bid_amount(self):
+        return self.bid_set.all().latest('bid').bid_amount
+
+
+
+class Bid(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    auction = models.ForeignKey(Auction, default=None, on_delete=models.CASCADE)
+    bidder = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
+    bid_amount = models.DecimalField(max_digits=8, decimal_places=2)
+
+    def __str__(self):
+        return self.bidder.username + ': ' + str(self.bid_amount)
+
+    def clean_amount(self):
+        auction = self.auction
+        if auction.get_latest_bid():
+            if self.bid_amount < auction.get_latest_bid_amount() + Decimal('0.01'):
+                raise ValidationError("The bid must be at least 0.01 higher than the last bid")
+        if self.bid_amount < auction.minimum_bid:
+            raise ValidationError("The bid must be higher than the minimum bid")
+        return self.bid_amount
 
 
