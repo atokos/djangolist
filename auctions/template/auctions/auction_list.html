@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if user.is_authenticated %}
-        <h2>Search for auctions by title:</h2>
-        <form action="{% url 'auctions:list' %}" method="get">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Search"><br>
-        </form>
-    {% endif %}
+    <h2>Search for auctions by title:</h2>
+    <form action="{% url 'auctions:list' %}" method="get">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Search"><br>
+    </form>
     {% if request.GET.title %}
         <h2>Auctions matching the search: "{{ title }}"</h2>
     {% else %}
@@ -18,7 +16,7 @@
         <div class="auction">
             <a href="{% url 'auctions:detail' auction_id=auction.id %}"><h2>{{ auction.title }}</h2></a>
             <p>Seller: {{ auction.user }}</p>
-            <p>{{ auction.short_desc }}</p>
+            <p>{{ auction.description }}</p>
             <p>Price: {{ auction.price }}</p>
             <p>Deadline: {{ auction.deadline }}</p>
         </div>

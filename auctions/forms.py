@@ -13,13 +13,13 @@ class AuctionCreateForm(forms.ModelForm):
 
     class Meta:
         model = models.Auction
-        fields = ['title', 'description', 'price', 'deadline']
+        fields = ['title', 'description', 'minimum_bid', 'deadline']
 
-    def clean_price(self):
-        price = self.cleaned_data.get('price')
-        if not price > 0:
+    def clean_minimum_bid(self):
+        minimum_bid = self.cleaned_data.get('minimum_bid')
+        if not minimum_bid > 0:
             raise forms.ValidationError("The price must be a positive number that is not 0.")
-        return price
+        return minimum_bid
 
     def clean_deadline(self):
         deadline = self.cleaned_data.get('deadline')

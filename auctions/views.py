@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.views import View
@@ -12,16 +12,16 @@ class AuctionListView(View):
     template_name = 'auctions/auction_list.html'
 
     form = AuctionSearchForm()
-    auctions = Auction.objects.filter(state='ACTIVE').order_by('deadline')
-
-    context = {'auctions': auctions,
-               'form': form,
-               }
+    auctions = Auction.objects.get_all_active()
+    context = {
+        'auctions': auctions,
+        'form': form,
+    }
 
     def get(self, request):
         if 'title' in request.GET:
             title = request.GET['title']
-            results = get_list_or_404(Auction, title__icontains=title, state='ACTIVE')
+            results = Auction.objects.get_by_title(title=title)
             self.context['auctions'] = results
             self.context['title'] = title
         return render(request, self.template_name, self.context)
@@ -30,7 +30,10 @@ class AuctionListView(View):
 class AuctionCreateView(View):
     template_name = 'auctions/auction_create.html'
     form = AuctionCreateForm()
-    context = {'form': form}
+
+    context = {
+        'form': form
+    }
 
     def post(self, request):
         form = AuctionCreateForm(request.POST)
@@ -52,7 +55,7 @@ class AuctionDetailView(View):
     context = {'form': form}
 
     def post(self, request, auction_id):
-        auction = get_object_or_404(Auction, pk=auction_id)
+        auction = get_object_or_404(auction_id)
         self.context['auction'] = auction
         if request.user == auction.user:
             error = "You cannot bid on your own auction."
@@ -74,7 +77,7 @@ class AuctionDetailView(View):
                     return render(request, self.template_name, self.context)
                 else:
                     # TODO fix 0.01 problem
-                    auction.price = bid_amount  # Update the price of auction
+                    auction.price = bid  # Update the price of auction
                     auction.check_deadline(timezone.now())  # Check if the soft deadline is met
                     # Register the new latest bidder in the auction model
                     latest_bidder = auction.set_latest_bidder(request.user)
