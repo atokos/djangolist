@@ -4,8 +4,9 @@
     <h2>Search for auctions by title:</h2>
     <form action="{% url 'auctions:list' %}" method="get">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Search"><br>
+        <p><label for="title">Search:</label>
+        <input id="title" type="text" name="title" maxlength="100" required></p>
+        <p><input type="submit" value="Search"><br></p>
     </form>
     {% if request.GET.title %}
         <h2>Auctions matching the search: "{{ title }}"</h2>
@@ -15,9 +16,9 @@
     {% for auction in auctions %}
         <div class="auction">
             <a href="{% url 'auctions:detail' auction_id=auction.id %}"><h2>{{ auction.title }}</h2></a>
-            <p>Seller: {{ auction.user }}</p>
+            <p>Seller: {{ auction.seller }}</p>
             <p>{{ auction.description }}</p>
-            <p>Price: {{ auction.price }}</p>
+            <p>Price: {{ auction.minimum_bid }}</p>
             <p>Deadline: {{ auction.deadline }}</p>
         </div>
     {% endfor %}

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from decimal import Decimal
 
 
@@ -34,17 +34,19 @@ class Auction(models.Model):
 
     banned = models.BooleanField(default=False)
     due = models.BooleanField(default=False)
+    #resolved = models.BooleanField(default=False)
 
     objects = AuctionManager()
 
     def __str__(self):
         return self.title
 
-    def is_due(self):
-        return self.due
-
     def is_active(self):
         return not self.banned and not self.due
+
+    def check_deadline(self):
+        if self.deadline < timezone.now():
+            self.due = True
 
     def get_latest_bid(self):
         if not self.bid_set.all():
@@ -53,7 +55,6 @@ class Auction(models.Model):
 
     def get_latest_bid_amount(self):
         return self.bid_set.all().latest('bid').bid_amount
-
 
 
 class Bid(models.Model):
