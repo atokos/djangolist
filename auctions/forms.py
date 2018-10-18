@@ -22,6 +22,15 @@ class AuctionCreateForm(forms.ModelForm):
         return deadline
 
 
+class AuctionsConfirmCreationForm(forms.Form):
+    CHOICES = [(x, x) for x in ("Yes", "No")]
+    option = forms.ChoiceField(choices=CHOICES)
+    title = forms.CharField(widget=forms.HiddenInput())
+    description = forms.CharField(widget=forms.HiddenInput())
+    minimum_bid = forms.DecimalField(widget=forms.HiddenInput())
+    deadline = forms.DateTimeField(widget=forms.HiddenInput())
+
+
 class AuctionEditForm(forms.ModelForm):
 
     class Meta:

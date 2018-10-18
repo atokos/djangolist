@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from decimal import Decimal
+from django.urls import reverse
 
 
 class AuctionManager(models.Manager):
@@ -40,6 +41,9 @@ class Auction(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('auctions:detail', args=[str(self.id)])
 
     def is_active(self):
         return not self.banned and not self.due
