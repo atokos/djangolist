@@ -25,7 +25,7 @@
                         <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
                     {% endif %}
                         <li><a href="{% url 'auctions:list'  %}">Browse auctions</a></li>
-                    {% if user.is_staff %}
+                    {% if perms.auctions.view_banned_auctions %}
                         <li><a href="{% url 'auctions:banned-list'  %}">View banned auctions</a></li>
                     {% endif %}
                 </ul>

@@ -10,19 +10,19 @@ from .forms import AuctionCreateForm, AuctionsConfirmCreationForm, AuctionEditFo
 
 
 class AuctionListView(View):
-    template_name = 'auctions/auction_list.html'
-    auctions = Auction.objects.get_all_active()
-    context = {
-        'auctions': auctions
-    }
 
     def get(self, request):
+        auctions = Auction.objects.get_all_active()
         if 'title' in request.GET:
             title = request.GET['title']
             results = Auction.objects.get_by_title(title=title)
-            self.context['auctions'] = results
-            self.context['title'] = title
-        return render(request, self.template_name, self.context)
+            context = {
+                'auctions': results,
+                'title': title
+            }
+        else:
+            context = {'auctions': auctions}
+        return render(request, 'auctions/auction_list.html', context)
 
 
 class AuctionCreateView(View):
@@ -190,23 +190,30 @@ class AuctionEditView(View):
             return HttpResponseNotFound
 
 
-class AuctionBanView(View, PermissionRequiredMixin):
-    permission_required = 'auctions.ban_auction'
+class AuctionBanView(View):
 
     def get(self, request, auction_id):
-        auction = Auction.objects.get_by_id(auction_id)
-        if auction.is_active():
-            auction.ban()
-            # TODO notify seller and bidders of ban
-            return render(request, 'auctions/auction_ban.html', {'auction': auction})
+        if request.user.has_perm("auctions.ban_auction"):
+            auction = Auction.objects.get_by_id(auction_id)
+            if auction.is_active():
+                auction.ban()
+                auction.save()
+                # TODO notify seller and bidders of ban
+                return render(request, 'auctions/auction_ban.html', {'auction': auction})
+            else:
+                messages.add_message(request, messages.ERROR, "Auction is already banned")
+                return redirect(reverse('auctions:list'))
         else:
-            messages.add_message(request, messages.ERROR, "Auction is already banned")
+            messages.add_message(request, messages.ERROR, "Permission denied")
             return redirect(reverse('auctions:list'))
 
 
-class AuctionBannedListView(View, PermissionRequiredMixin):
-    permission_required = 'auctions.view_banned_auctions'
+class AuctionBannedListView(View):
 
     def get(self, request):
-        auctions = Auction.objects.get_all_banned()
-        return render(request, 'auctions/auction_banned_list.html', {'banned_auctions': auctions})
+        if request.user.has_perm("auctions.view_banned_auctions"):
+            auctions = Auction.objects.get_all_banned()
+            return render(request, 'auctions/auction_banned_list.html', {'banned_auctions': auctions})
+        else:
+            messages.add_message(request, messages.ERROR, "Permission denied")
+            return redirect(reverse('auctions:list'))
