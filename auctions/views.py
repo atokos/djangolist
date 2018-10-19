@@ -164,7 +164,7 @@ class AuctionEditView(View):
         if auction.is_active():
             if not auction.seller == request.user:
                 messages.add_message(request, messages.INFO, "You are not allowed to edit this auction.")
-                return redirect(reverse('auctions:list'))
+                return redirect(auction)
             else:
                 form = AuctionEditForm(instance=auction)
                 context = {'form': form,
@@ -178,14 +178,15 @@ class AuctionEditView(View):
         if auction.is_active():
             if not auction.seller == request.user:
                 messages.add_message(request, messages.INFO, "You are not allowed to edit this auction.")
-                return redirect(reverse('auctions:list'))
+                return redirect(auction)
             else:
                 form = AuctionEditForm(request.POST, instance=auction)
                 if form.is_valid():
                     auction = form.save()
-                    return redirect('auctions:detail', auction_id=auction.id)
-                else:
-                    return redirect('auctions:list')
+                    return redirect(auction)
+                context = {'form': form,
+                           'auction': auction}
+                return render(request, self.template_name, context)
         else:
             return HttpResponseNotFound
 
