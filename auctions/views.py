@@ -3,7 +3,6 @@ from django.views import View
 from django.contrib import messages
 from django.http import HttpResponseNotFound
 from decimal import Decimal
-from django.core.exceptions import ValidationError
 
 from .models import Auction, Bid
 from .forms import AuctionCreateForm, AuctionsConfirmCreationForm, AuctionEditForm, AuctionBidForm
@@ -146,6 +145,8 @@ class AuctionBidView(View):
                     new_bid.auction = auction
                     new_bid.bidder = request.user
                     new_bid.save()
+                    #TODO Send mail to latest bidder and the seller
+                    #TODO Soft deadlines
                     return redirect(auction)
                 else:
                     messages.add_message(request, messages.ERROR, "Invalid bid.")
