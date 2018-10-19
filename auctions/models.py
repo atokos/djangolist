@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
+from django.core.mail import send_mail
 
 
 class AuctionManager(models.Manager):
@@ -71,11 +72,54 @@ class Auction(models.Model):
 
     def get_latest_bid_amount(self):
         if not self.bid_set.all():
-            return None
+            return 0
         return self.get_latest_bid().bid_amount
 
     def ban(self):
         self.banned = True
+        self.save()
+
+    def mail_seller(self, subject, message):
+        recipients = [self.seller.email]
+        send_mail(
+            subject,
+            message,
+            'noreply@djangolist.com',
+            recipients,
+            fail_silently=False
+        )
+
+    def mail_bidders(self, subject, message):
+        bids = self.bid_set.all()
+        bidder_emails = []
+
+        for bid in bids:
+            email = bid.bidder.email
+            bidder_emails.append(email)
+
+        send_mail(
+            subject,
+            message,
+            'noreply@djangolist.com',
+            bidder_emails,
+            fail_silently=False
+        )
+
+    def mail_latest_bidder(self, subject, message):
+        latest_bidder = self.get_latest_bidder()
+        recipients = [latest_bidder]
+        send_mail(
+            subject,
+            message,
+            'noreply@djangolist.com',
+            recipients,
+            fail_silently=False
+        )
+
+    def check_soft_deadline(self):
+        if timezone.now() >= self.deadline - timezone.timedelta(minutes=5):
+            self.deadline += timezone.timedelta(minutes=5)
+            self.save()
 
 
 class Bid(models.Model):

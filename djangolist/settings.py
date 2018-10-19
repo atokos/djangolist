@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'auctions',
     'accounts',
     'debug_toolbar',
+    'autofixture',
 
 ]
 

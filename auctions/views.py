@@ -69,6 +69,7 @@ class AuctionConfirmCreationView(View):
             )
             auction.save()
             messages.add_message(request, messages.INFO, "New auction has been created")
+            auction.mail_seller("New Auction created", "A new auction was successfully created.")
             return redirect(auction)
         else:
             messages.add_message(request, messages.INFO, "Auction creation cancelled")
@@ -127,7 +128,7 @@ class AuctionBidView(View):
                 form = AuctionBidForm(request.POST)
                 if form.is_valid():
                     bid_amount = form.cleaned_data.get('bid_amount')
-                    if bid_amount < auction.get_latest_bid_amount() + Decimal('0.01'):
+                    if bid_amount <= auction.get_latest_bid_amount() + Decimal('0.01'):
                         messages.add_message(
                             request,
                             messages.ERROR,
@@ -141,13 +142,17 @@ class AuctionBidView(View):
                             "The bid must be higher than the minimum bid"
                         )
                         return redirect(reverse('auctions:bid', args=[str(auction_id)]))
+                    # Mail seller and latest bidder
+                    auction.mail_seller("New Bid", "A new bid has been placed on your auction.")
+                    auction.mail_latest_bidder("New Bid", "A new bid has been placed on an auction you have bid on.")
+                    # Create and save new Bid
                     new_bid = Bid()
                     new_bid.bid_amount = bid_amount
                     new_bid.auction = auction
                     new_bid.bidder = request.user
                     new_bid.save()
-                    #TODO Send mail to latest bidder and the seller
-                    #TODO Soft deadlines
+                    # Extend deadline if the bid is placed 5 minutes within the deadline
+                    auction.check_soft_deadline()
                     return redirect(auction)
                 else:
                     messages.add_message(request, messages.ERROR, "Invalid bid.")
@@ -198,8 +203,8 @@ class AuctionBanView(View):
             auction = Auction.objects.get_by_id(auction_id)
             if auction.is_active():
                 auction.ban()
-                auction.save()
-                # TODO notify seller and bidders of ban
+                auction.mail_seller("Auction banned", "Your auction has been banned for breaking the rules.")
+                auction.mail_bidders("Auction banned", "The auction you have bid on has been banned.")
                 return render(request, 'auctions/auction_ban.html', {'auction': auction})
             else:
                 messages.add_message(request, messages.ERROR, "Auction is already banned")
