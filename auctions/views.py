@@ -3,7 +3,6 @@ from django.views import View
 from django.contrib import messages
 from django.http import HttpResponseNotFound
 from decimal import Decimal
-from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .models import Auction, Bid
 from .forms import AuctionCreateForm, AuctionsConfirmCreationForm, AuctionEditForm, AuctionBidForm
@@ -68,11 +67,11 @@ class AuctionConfirmCreationView(View):
                 seller=seller
             )
             auction.save()
-            messages.add_message(request, messages.INFO, "New auction has been created")
+            messages.success(request, "New auction has been created")
             auction.mail_seller("New Auction created", "A new auction was successfully created.")
             return redirect(auction)
         else:
-            messages.add_message(request, messages.INFO, "Auction creation cancelled")
+            messages.info(request, "Auction creation cancelled")
             return redirect(reverse('auctions:list'))
 
 
@@ -101,10 +100,10 @@ class AuctionBidView(View):
         auction = Auction.objects.get_by_id(auction_id)
         if auction.is_active():
             if request.user == auction.seller:
-                messages.add_message(request, messages.ERROR, "Cannot bid on own auctions!")
+                messages.error(request, "Cannot bid on own auctions!")
                 return redirect(auction)
             if request.user == auction.get_latest_bidder():
-                messages.add_message(request, messages.ERROR, "Cannot bid on winning auction!")
+                messages.error(request, "Cannot bid on winning auction!")
                 return redirect(auction)
             form = AuctionBidForm()
             context = {
@@ -119,28 +118,20 @@ class AuctionBidView(View):
         auction = Auction.objects.get_by_id(auction_id)
         if auction.is_active():
             if request.user == auction.seller:
-                messages.add_message(request, messages.ERROR, "Cannot bid on own auctions!")
+                messages.error(request, "Cannot bid on own auctions!")
                 return redirect(auction)
             if request.user == auction.get_latest_bidder():
-                messages.add_message(request, messages.ERROR, "Cannot bid on winning auction!")
+                messages.error(request, "Cannot bid on winning auction!")
                 return redirect(auction)
             if auction.is_active():
                 form = AuctionBidForm(request.POST)
                 if form.is_valid():
                     bid_amount = form.cleaned_data.get('bid_amount')
                     if bid_amount <= auction.get_latest_bid_amount() + Decimal('0.01'):
-                        messages.add_message(
-                            request,
-                            messages.ERROR,
-                            "The bid must be at least 0.01 higher than the current bid"
-                        )
+                        messages.error(request, "The bid must be at least 0.01 higher than the current bid")
                         return redirect(reverse('auctions:bid', args=[str(auction_id)]))
                     if bid_amount < auction.minimum_bid:
-                        messages.add_message(
-                            request,
-                            messages.ERROR,
-                            "The bid must be higher than the minimum bid"
-                        )
+                        messages.error(request, "The bid must be higher than the minimum bid")
                         return redirect(reverse('auctions:bid', args=[str(auction_id)]))
                     # Mail seller and latest bidder
                     auction.mail_seller("New Bid", "A new bid has been placed on your auction.")
@@ -153,9 +144,10 @@ class AuctionBidView(View):
                     new_bid.save()
                     # Extend deadline if the bid is placed 5 minutes within the deadline
                     auction.check_soft_deadline()
+                    messages.success(request, "The was created.")
                     return redirect(auction)
                 else:
-                    messages.add_message(request, messages.ERROR, "Invalid bid.")
+                    messages.error(request, "Invalid bid.")
                     return redirect(auction)
         else:
             return HttpResponseNotFound
@@ -168,7 +160,7 @@ class AuctionEditView(View):
         auction = Auction.objects.get_by_id(auction_id)
         if auction.is_active():
             if not auction.seller == request.user:
-                messages.add_message(request, messages.INFO, "You are not allowed to edit this auction.")
+                messages.info(request, "You are not allowed to edit this auction.")
                 return redirect(auction)
             else:
                 form = AuctionEditForm(instance=auction)
@@ -182,7 +174,7 @@ class AuctionEditView(View):
         auction = Auction.objects.get_by_id(auction_id)
         if auction.is_active():
             if not auction.seller == request.user:
-                messages.add_message(request, messages.INFO, "You are not allowed to edit this auction.")
+                messages.info(request, "You are not allowed to edit this auction.")
                 return redirect(auction)
             else:
                 form = AuctionEditForm(request.POST, instance=auction)
@@ -207,10 +199,10 @@ class AuctionBanView(View):
                 auction.mail_bidders("Auction banned", "The auction you have bid on has been banned.")
                 return render(request, 'auctions/auction_ban.html', {'auction': auction})
             else:
-                messages.add_message(request, messages.ERROR, "Auction is already banned")
+                messages.error(request, "Auction is already banned")
                 return redirect(reverse('auctions:list'))
         else:
-            messages.add_message(request, messages.ERROR, "Permission denied")
+            messages.error(request, "Permission denied")
             return redirect(reverse('auctions:list'))
 
 
@@ -221,5 +213,5 @@ class AuctionBannedListView(View):
             auctions = Auction.objects.get_all_banned()
             return render(request, 'auctions/auction_banned_list.html', {'banned_auctions': auctions})
         else:
-            messages.add_message(request, messages.ERROR, "Permission denied")
+            messages.error(request, "Permission denied")
             return redirect(reverse('auctions:list'))
