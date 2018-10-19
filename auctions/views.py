@@ -3,6 +3,7 @@ from django.views import View
 from django.contrib import messages
 from django.http import HttpResponseNotFound
 from decimal import Decimal
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from .models import Auction, Bid
 from .forms import AuctionCreateForm, AuctionsConfirmCreationForm, AuctionEditForm, AuctionBidForm
@@ -187,3 +188,25 @@ class AuctionEditView(View):
                     return redirect('auctions:list')
         else:
             return HttpResponseNotFound
+
+
+class AuctionBanView(View, PermissionRequiredMixin):
+    permission_required = 'auctions.ban_auction'
+
+    def get(self, request, auction_id):
+        auction = Auction.objects.get_by_id(auction_id)
+        if auction.is_active():
+            auction.ban()
+            # TODO notify seller and bidders of ban
+            return render(request, 'auctions/auction_ban.html', {'auction': auction})
+        else:
+            messages.add_message(request, messages.ERROR, "Auction is already banned")
+            return redirect(reverse('auctions:list'))
+
+
+class AuctionBannedListView(View, PermissionRequiredMixin):
+    permission_required = 'auctions.view_banned_auctions'
+
+    def get(self, request):
+        auctions = Auction.objects.get_all_banned()
+        return render(request, 'auctions/auction_banned_list.html', {'banned_auctions': auctions})

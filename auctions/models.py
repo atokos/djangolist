@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.utils import timezone
-from decimal import Decimal
 from django.urls import reverse
 
 
@@ -10,6 +8,9 @@ class AuctionManager(models.Manager):
 
     def get_all_active(self):
         return self.filter(banned=False, due=False)
+
+    def get_all_banned(self):
+        return self.filter(banned=True)
 
     def get_by_id(self, auction_id):
         return self.get(pk=auction_id)
@@ -39,6 +40,12 @@ class Auction(models.Model):
 
     objects = AuctionManager()
 
+    class Meta:
+        permissions = (
+            ("ban_auction", "Can ban an auction"),
+            ("view_banned_auctions", "Can view banned auctions"),
+        )
+
     def __str__(self):
         return self.title
 
@@ -66,6 +73,9 @@ class Auction(models.Model):
         if not self.bid_set.all():
             return None
         return self.get_latest_bid().bid_amount
+
+    def ban(self):
+        self.banned = True
 
 
 class Bid(models.Model):

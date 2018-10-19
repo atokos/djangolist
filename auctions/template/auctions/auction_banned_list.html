@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>List of all banned auctions</h2>
+    {% for auction in banned_auctions %}
+        <div class="auction">
+            <a href="{% url 'auctions:detail' auction_id=auction.id %}"><h2>{{ auction.title }}</h2></a>
+            <p>Seller: {{ auction.seller }}</p>
+            <p>{{ auction.description }}</p>
+            <p>Starting price: {{ auction.minimum_bid }}</p>
+            <p>Latest bid: {{ auction.get_latest_bid_amount }}</p>
+            <p>Deadline: {{ auction.deadline }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

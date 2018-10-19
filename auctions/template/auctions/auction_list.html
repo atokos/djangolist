@@ -18,7 +18,8 @@
             <a href="{% url 'auctions:detail' auction_id=auction.id %}"><h2>{{ auction.title }}</h2></a>
             <p>Seller: {{ auction.seller }}</p>
             <p>{{ auction.description }}</p>
-            <p>Price: {{ auction.minimum_bid }}</p>
+            <p>Starting price: {{ auction.minimum_bid }}</p>
+            <p>Latest bid: {{ auction.get_latest_bid_amount }}</p>
             <p>Deadline: {{ auction.deadline }}</p>
         </div>
     {% endfor %}

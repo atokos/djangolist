@@ -13,7 +13,7 @@
             <nav>
                 <ul>
                     {%  if user.is_authenticated %}
-                        <li><a href="{% url 'accounts:logout' %}">Profile</a></li>
+                        <li>Logged in as: {{ user.username }}</li>
                         <li>
                             <form action="{% url 'accounts:logout' %}" method="post">
                                 {% csrf_token %}
@@ -21,10 +21,13 @@
                             </form>
                         </li>
                     {% else %}
-                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
-                    <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
+                        <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                        <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
                     {% endif %}
-                    <li><a href="{% url 'auctions:list'  %}">Browse auctions</a></li>
+                        <li><a href="{% url 'auctions:list'  %}">Browse auctions</a></li>
+                    {% if user.is_staff %}
+                        <li><a href="{% url 'auctions:banned-list'  %}">View banned auctions</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         <header>
