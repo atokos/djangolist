@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.shortcuts import render, redirect, reverse
 from django.views import View
 from django.contrib import messages
 from django.http import HttpResponseNotFound
+from decimal import Decimal
+from django.core.exceptions import ValidationError
 
-from .models import Auction
+from .models import Auction, Bid
 from .forms import AuctionCreateForm, AuctionsConfirmCreationForm, AuctionEditForm, AuctionBidForm
 
 
@@ -24,6 +26,7 @@ class AuctionListView(View):
 
 
 class AuctionCreateView(View):
+
     def post(self, request):
         form = AuctionCreateForm(request.POST)
         if form.is_valid():
@@ -73,13 +76,80 @@ class AuctionConfirmCreationView(View):
 
 
 class AuctionDetailView(View):
-    template_name = 'auctions/auction_details.html'
 
     def get(self, request, auction_id):
         auction = Auction.objects.get_by_id(auction_id)
         if auction.is_active():
             context = {'auction': auction}
-            return render(request, self.template_name, context)
+            return render(request, 'auctions/auction_details.html', context)
+        else:
+            return HttpResponseNotFound
+
+    def post(self, request, auction_id):
+        auction = Auction.objects.get_by_id(auction_id)
+        if auction.is_active():
+            context = {'auction': auction}
+            return render(request, 'auctions/auction_bid.html', context)
+        else:
+            return HttpResponseNotFound
+
+
+class AuctionBidView(View):
+
+    def get(self, request, auction_id):
+        auction = Auction.objects.get_by_id(auction_id)
+        if auction.is_active():
+            if request.user == auction.seller:
+                messages.add_message(request, messages.ERROR, "Cannot bid on own auctions!")
+                return redirect(auction)
+            if request.user == auction.get_latest_bidder():
+                messages.add_message(request, messages.ERROR, "Cannot bid on winning auction!")
+                return redirect(auction)
+            form = AuctionBidForm()
+            context = {
+                'auction': auction,
+                'form': form,
+            }
+            return render(request, 'auctions/auction_bid.html', context)
+        else:
+            return HttpResponseNotFound
+
+    def post(self, request, auction_id):
+        auction = Auction.objects.get_by_id(auction_id)
+        if auction.is_active():
+            if request.user == auction.seller:
+                messages.add_message(request, messages.ERROR, "Cannot bid on own auctions!")
+                return redirect(auction)
+            if request.user == auction.get_latest_bidder():
+                messages.add_message(request, messages.ERROR, "Cannot bid on winning auction!")
+                return redirect(auction)
+            if auction.is_active():
+                form = AuctionBidForm(request.POST)
+                if form.is_valid():
+                    bid_amount = form.cleaned_data.get('bid_amount')
+                    if bid_amount < auction.get_latest_bid_amount() + Decimal('0.01'):
+                        messages.add_message(
+                            request,
+                            messages.ERROR,
+                            "The bid must be at least 0.01 higher than the current bid"
+                        )
+                        return redirect(reverse('auctions:bid', args=[str(auction_id)]))
+                    if bid_amount < auction.minimum_bid:
+                        messages.add_message(
+                            request,
+                            messages.ERROR,
+                            "The bid must be higher than the minimum bid"
+                        )
+                        return redirect(reverse('auctions:bid', args=[str(auction_id)]))
+                    new_bid = Bid()
+                    new_bid.bid_amount = bid_amount
+                    new_bid.auction = auction
+                    new_bid.bidder = request.user
+                    new_bid.save()
+                    return redirect(auction)
+                else:
+                    messages.add_message(request, messages.ERROR, "Invalid bid.")
+                    return redirect(auction)
         else:
             return HttpResponseNotFound
 
@@ -88,26 +158,31 @@ class AuctionEditView(View):
     template_name = 'auctions/auction_edit.html'
 
     def get(self, request, auction_id):
-        auction = get_object_or_404(Auction, id=auction_id)
-
-        if not auction.seller == request.user:
-            messages.add_message(request, messages.INFO, "You are not allowed to edit this auction.")
-            return redirect(reverse('homepage'))
+        auction = Auction.objects.get_by_id(auction_id)
+        if auction.is_active():
+            if not auction.seller == request.user:
+                messages.add_message(request, messages.INFO, "You are not allowed to edit this auction.")
+                return redirect(reverse('auctions:list'))
+            else:
+                form = AuctionEditForm(instance=auction)
+                context = {'form': form,
+                           'auction': auction}
+                return render(request, self.template_name, context)
         else:
-            form = AuctionEditForm(instance=auction)
-            context = {'form': form,
-                       'auction': auction}
-            return render(request, self.template_name, context)
+            return HttpResponseNotFound
 
     def post(self, request, auction_id):
-        auction = get_object_or_404(Auction, pk=auction_id)
-        if not auction.seller == request.user:
-            messages.add_message(request, messages.INFO, "You are not allowed to edit this auction.")
-            return redirect(reverse('homepage'))
-        else:
-            form = AuctionEditForm(request.POST, instance=auction)
-            if form.is_valid():
-                auction = form.save()
-                return redirect('auctions:detail', auction_id=auction.id)
+        auction = Auction.objects.get_by_id(auction_id)
+        if auction.is_active():
+            if not auction.seller == request.user:
+                messages.add_message(request, messages.INFO, "You are not allowed to edit this auction.")
+                return redirect(reverse('auctions:list'))
             else:
-                return redirect('homepage')
+                form = AuctionEditForm(request.POST, instance=auction)
+                if form.is_valid():
+                    auction = form.save()
+                    return redirect('auctions:detail', auction_id=auction.id)
+                else:
+                    return redirect('auctions:list')
+        else:
+            return HttpResponseNotFound

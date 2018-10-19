@@ -55,10 +55,17 @@ class Auction(models.Model):
     def get_latest_bid(self):
         if not self.bid_set.all():
             return None
-        return self.bid_set.all().latest('bid')
+        return self.bid_set.all().latest('created')
+
+    def get_latest_bidder(self):
+        if not self.bid_set.all():
+            return None
+        return self.get_latest_bid().bidder
 
     def get_latest_bid_amount(self):
-        return self.bid_set.all().latest('bid').bid_amount
+        if not self.bid_set.all():
+            return None
+        return self.get_latest_bid().bid_amount
 
 
 class Bid(models.Model):
@@ -69,14 +76,14 @@ class Bid(models.Model):
 
     def __str__(self):
         return self.bidder.username + ': ' + str(self.bid_amount)
-
-    def clean_amount(self):
+'''
+    def clean_bid_amount(self):
         auction = self.auction
         if auction.get_latest_bid():
             if self.bid_amount < auction.get_latest_bid_amount() + Decimal('0.01'):
-                raise ValidationError("The bid must be at least 0.01 higher than the last bid")
+                raise ValidationError("The bid must be at least 0.01 higher than the current bid")
         if self.bid_amount < auction.minimum_bid:
             raise ValidationError("The bid must be higher than the minimum bid")
         return self.bid_amount
-
+'''
 

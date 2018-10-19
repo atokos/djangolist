@@ -5,17 +5,14 @@
         <h2> {{ auction.title }}</h2>
         <p>Seller: {{ auction.seller }}</p>
         <p>Description: {{ auction.description }}</p>
-        {%  if auction.user == request.user %}
-            <br><a href="{% url 'auctions:edit' auction_id=auction.id %}">Edit description</a>
+        {%  if auction.seller == request.user %}
+            <a href="{% url 'auctions:edit' auction_id=auction.id %}">Edit description</a>
         {% endif %}
-        <p>Price: {{ auction.minimum_bid }}</p>
+        <p>Starting price: {{ auction.minimum_bid }}</p>
+        <p>Latest bid: {{ auction.get_latest_bid_amount }}</p>
         <p>Deadline: {{ auction.deadline }}</p>
         {% if user.is_authenticated %}
-            <form method="post" action="{% url 'auctions:detail' auction_id=auction.id %}">
-                {% csrf_token %}
-                {{ form }}
-                <input type="submit" value="Bid">
-            </form>
+            <a href="{% url 'auctions:bid' auction_id=auction.id %}">Bid on this auction</a>
         {% endif %}
     </div>
 {% endblock %}
