@@ -1,6 +1,7 @@
 from django import forms
 from .models import Auction, Bid
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 
 class AuctionCreateForm(forms.ModelForm):
@@ -12,13 +13,13 @@ class AuctionCreateForm(forms.ModelForm):
     def clean_minimum_bid(self):
         minimum_bid = self.cleaned_data.get('minimum_bid')
         if not minimum_bid > 0:
-            raise forms.ValidationError("The price must be a positive number greater than zero.")
+            raise forms.ValidationError(_("The price must be a positive number greater than zero."))
         return minimum_bid
 
     def clean_deadline(self):
         deadline = self.cleaned_data.get('deadline')
         if not deadline > (timezone.now() + timezone.timedelta(hours=72)):
-            raise forms.ValidationError("This deadline is too soon, the minimum is 72h from now.")
+            raise forms.ValidationError(_("This deadline is too soon, the minimum is 72h from now."))
         return deadline
 
 

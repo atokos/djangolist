@@ -2,6 +2,11 @@
 
 {% block content %}
     <h1>Hello {{ user.username }}, this is your profile</h1>
+    <h3>Personal information:</h3>
+    <p>Preferences.user {{ preferences.user }}</p>
+    <p>Preferences.currency {{ preferences.currency }}</p>
+    <p>Preferences.language {{ preferences.language }}</p>
     <a href="{% url 'accounts:change-email' %}">Edit your email</a>
     <a href="{% url 'accounts:change-password' %}">Change password</a>
+    <a href="{% url 'accounts:set-preferences' %}">Set preferences</a>
 {% endblock %}

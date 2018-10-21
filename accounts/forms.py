@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
+from .models import UserPreference
+
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -28,6 +30,17 @@ class EditEmailForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = {'email',
-                  'password',
-                  }
+        fields = {
+            'email',
+            'password',
+         }
+
+
+class AccountSetPreferencesForm(forms.ModelForm):
+
+    class Meta:
+        model = UserPreference
+        fields = {
+            'language',
+            # 'currency',
+        }
