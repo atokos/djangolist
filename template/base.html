@@ -1,4 +1,7 @@
-{%  load static from staticfiles %}
+{% load static from staticfiles %}
+{% load static i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
 
 <!DOCTYPE html>
 <html>
@@ -13,21 +16,42 @@
             <nav>
                 <ul>
                     {%  if user.is_authenticated %}
-                        <li>Logged in as: {{ user.username }}</li>
+                        <li>{% trans "Logged in as" %}: {{ user.username }}</li>
                         <li>
                             <form action="{% url 'accounts:logout' %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit">Logout</button>
+                                <button type="submit">{% trans "Logout" %}</button>
                             </form>
                         </li>
+                        <li><a href="{% url 'accounts:profile' %}">{% trans "Profile" %}</a></li>
+                        <li><a href="{% url 'auctions:create' %}">{% trans "Create new auction" %}</a></li>
                     {% else %}
-                        <li><a href="{% url 'accounts:login' %}">Login</a></li>
-                        <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
+                        <li><a href="{% url 'accounts:login' %}">{% trans "Log in" %}</a></li>
+                        <li><a href="{% url 'accounts:signup' %}">{% trans "Sign up" %}</a></li>
+                        <li>
+                            <p>{% trans "Language" %}</p>
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ redirect_to }}">
+                                <select name="language" id="">
+                                    {% get_available_languages as LANGUAGES %}
+                                    {% get_language_info_list for LANGUAGES as languages %}
+                                    {% for language in languages %}
+                                        <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+                                            {{ language.name_local }} ({{ language.code }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <input type="submit" value="{% trans "Save" %}">
+
+                            </form>
+                        </li>
                     {% endif %}
-                        <li><a href="{% url 'auctions:list'  %}">Browse auctions</a></li>
+                        <li><a href="{% url 'auctions:list'  %}">{% trans "Browse auctions" %}</a></li>
                     {% if perms.auctions.view_banned_auctions %}
-                        <li><a href="{% url 'auctions:banned-list'  %}">View banned auctions</a></li>
+                        <li><a href="{% url 'auctions:banned-list'  %}">{% trans "View banned auctions" %}</a></li>
                     {% endif %}
+
                 </ul>
             </nav>
         <header>

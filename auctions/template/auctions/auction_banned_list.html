@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>List of all banned auctions</h2>
+    <h2>{% trans "List of all banned auctions" %}</h2>
     {% for auction in banned_auctions %}
         <div class="auction">
             <h2>{{ auction.title }}</h2>
-            <p>Seller: {{ auction.seller }}</p>
+            <p>{% trans "Seller" %}: {{ auction.seller }}</p>
             <p>{{ auction.description }}</p>
-            <p>Starting price: {{ auction.minimum_bid }}</p>
-            <p>Latest bid: {{ auction.get_latest_bid_amount }}</p>
-            <p>Deadline: {{ auction.deadline }}</p>
+            <p>{% trans "Starting price" %}: {{ auction.minimum_bid }}</p>
+            <p>{% trans "Latest bid" %}: {{ auction.get_latest_bid_amount }}</p>
+            <p>{% trans "Deadline" %}: {{ auction.deadline }}</p>
         </div>
     {% endfor %}
 {% endblock %}

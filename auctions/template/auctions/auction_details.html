@@ -3,19 +3,19 @@
 {% block content %}
     <div class="auction-details">
         <h2> {{ auction.title }}</h2>
-        <p>Seller: {{ auction.seller }}</p>
-        <p>Description: {{ auction.description }}</p>
+        <p>{% trans "Seller" %}: {{ auction.seller }}</p>
+        <p>{% trans "Description" %}: {{ auction.description }}</p>
         {%  if auction.seller == request.user %}
-            <a href="{% url 'auctions:edit' auction_id=auction.id %}">Edit description</a>
+            <a href="{% url 'auctions:edit' auction_id=auction.id %}">{% trans "Edit description" %}</a>
         {% endif %}
-        <p>Starting price: {{ auction.minimum_bid }}</p>
-        <p>Latest bid: {{ auction.get_latest_bid_amount }}</p>
-        <p>Deadline: {{ auction.deadline }}</p>
+            <p>{% trans "Starting price" %}: {{ auction.minimum_bid }}</p>
+            <p>{% trans "Latest bid" %}: {{ auction.get_latest_bid_amount }}</p>
+            <p>{% trans "Deadline" %}: {{ auction.deadline }}</p>
         {% if user.is_authenticated %}
-            <a href="{% url 'auctions:bid' auction_id=auction.id %}">Bid on this auction</a>
+            <a href="{% url 'auctions:bid' auction_id=auction.id %}">{% trans "Bid" %}</a>
         {% endif %}
         {% if perms.ban_auction %}
-            <a href="{% url 'auctions:ban' auction_id=auction.id %}">Ban this auction</a>
+            <a href="{% url 'auctions:ban' auction_id=auction.id %}">{% trans "Ban" %}</a>
         {% endif %}
     </div>
 {% endblock %}

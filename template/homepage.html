@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block content %}
-    <h1>Homepage</h1>
-    <p>Welcome to Djangolist</p>
+    <h1>{% trans "Homepage" %}</h1>
+    <p>{% trans "Welcome to Djangolist" %}</p>
 {% endblock %}

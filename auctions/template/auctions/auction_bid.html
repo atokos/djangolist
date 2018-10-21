@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Bid on auction {{ auction.title }}</h2
-    <p>Minimum bid: {{ auction.minimum_bid }}</p>
-    <p>Current highest bid: {{ auction.get_latest_bid_amount }}</p>
-    <p>Bids have to be 0.01 higher than the current highest bid</p>
+    <h2>{% trans "Bid on auction" %} {{ auction.title }}</h2
+    <p>{% trans "Minimum bid" %}: {{ auction.minimum_bid }}</p>
+    <p>{% trans "Latest bid" %}Current highest bid: {{ auction.get_latest_bid_amount }}</p>
+    <p>{% trans "Bids have to be 0.01 higher than the current highest bid" %}</p>
     <form method="post" action="{% url 'auctions:bid' auction_id=auction.id%}">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Place bid">
+        <input type="submit" value="{% trans "Place bid" %}">
     </form>
 {% endblock %}
