@@ -107,6 +107,14 @@ def logout_view(request):
         return redirect('homepage')
 
 
+def set_currency(request):
+    if request.method == 'POST':
+        currency = request.POST.get('currency')
+        print(currency)
+        request.session['currency'] = currency
+        return redirect(reverse('homepage'))
+
+
 def set_language(request, language_code):
     translation.activate(language_code)
     request.session[translation.LANGUAGE_SESSION_KEY] = language_code

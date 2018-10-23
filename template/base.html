@@ -29,10 +29,20 @@
                         <li><a href="{% url 'accounts:login' %}">{% trans "Log in" %}</a></li>
                         <li><a href="{% url 'accounts:signup' %}">{% trans "Sign up" %}</a></li>
                         <li>
+                            <p>{% trans "Currency" %}</p>
+                            <form action="{% url 'accounts:set_currency' %}" method="post">
+                                {% csrf_token %}
+                                <select name="currency" id="">
+                                    <option value="usd" {% if request.session.currency == usd %} selected {% endif %}>US Dollars ($)</option>
+                                    <option value="eur" {% if request.session.currency == eur %} selected {% endif %} >Euros (€)</option>
+                                </select>
+                                <input type="submit" value="{% trans "Save" %}">
+                            </form>
+                        </li>
+                        <li>
                             <p>{% trans "Language" %}</p>
                             <form action="{% url 'set_language' %}" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="next" value="{{ redirect_to }}">
                                 <select name="language" id="">
                                     {% get_available_languages as LANGUAGES %}
                                     {% get_language_info_list for LANGUAGES as languages %}
@@ -43,7 +53,6 @@
                                     {% endfor %}
                                 </select>
                                 <input type="submit" value="{% trans "Save" %}">
-
                             </form>
                         </li>
                     {% endif %}
@@ -62,6 +71,7 @@
                     {% endfor %}
                 </ul>
             {% endif %}
+        {{ request.session.currency }}
         <div id="content">
             {% block content %}
             {% endblock %}

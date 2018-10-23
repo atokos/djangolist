@@ -10,6 +10,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('preference/', login_required(AccountSetPreferencesView.as_view()), name='set-preferences'),
+    path('set-currency/', views.set_currency, name='set_currency'),
     path('profile/', login_required(AccountProfileView.as_view()), name='profile'),
     path('change-email/', login_required(AccountChangeEmailView.as_view()), name='change-email'),
     path('change-password/', login_required(AccountChangePasswordView.as_view()), name='change-password'),
