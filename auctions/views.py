@@ -12,6 +12,7 @@ from .forms import AuctionCreateForm, AuctionsConfirmCreationForm, AuctionEditFo
 class AuctionListView(View):
 
     def get(self, request):
+        print("list")
         auctions = Auction.objects.get_all_active()
         if 'title' in request.GET:
             title = request.GET['title']
@@ -69,7 +70,11 @@ class AuctionConfirmCreationView(View):
             )
             auction.save()
             messages.success(request, _("New auction has been created"))
-            auction.mail_seller("New Auction created", "A new auction was successfully created.")
+
+            subject = "New Auction %d created!" % title
+            body = "The new auction named %d was successfully created." % title
+            seller.email_user(subject, body)
+
             return redirect(auction)
         else:
             messages.info(request, _("Auction creation cancelled"))
@@ -137,15 +142,25 @@ class AuctionBidView(View):
                     if bid_amount < auction.minimum_bid:
                         messages.error(request, _("The bid must be higher than the minimum bid"))
                         return redirect(reverse('auctions:bid', args=[str(auction_id)]))
+
                     # Mail seller and latest bidder
-                    auction.mail_seller("New Bid", "A new bid has been placed on your auction.")
-                    auction.mail_latest_bidder("New Bid", "A new bid has been placed on an auction you have bid on.")
+                    seller = auction.seller
+                    bidders = auction.bid_set.all()
+                    title = auction.title
+                    subject = "New Bid on auction %d" % title
+                    seller_body = "A new bid has been placed on your auction %d." % title
+                    bidder_body = "A new bid has been placed on the auction %d, that you have bid on." % title
+                    seller.email_user(subject, seller_body)
+                    for bidder in bidders:
+                        bidder.email_user(subject, bidder_body)
+
                     # Create and save new Bid
                     new_bid = Bid()
                     new_bid.bid_amount = bid_amount
                     new_bid.auction = auction
                     new_bid.bidder = request.user
                     new_bid.save()
+
                     # Extend deadline if the bid is placed 5 minutes within the deadline
                     auction.check_soft_deadline()
                     messages.success(request, _("The bid was created."))
@@ -200,8 +215,17 @@ class AuctionBanView(View):
             auction = Auction.objects.get_by_id(auction_id)
             if auction.is_active():
                 auction.ban()
-                auction.mail_seller("Auction banned", "Your auction has been banned for breaking the rules.")
-                auction.mail_bidders("Auction banned", "The auction you have bid on has been banned.")
+
+                # Mail seller and bidders
+                seller = auction.seller
+                bidders = auction.bid_set.all()
+                title = auction.title
+                subject = "Auction %d banned" % title
+                seller_body = "Your auction %d has been banned for breaking the rules." % title
+                bidder_body = "The auction %d, that you have bid on has been banned." % title
+                seller.email_user(subject, seller_body)
+                for bidder in bidders:
+                    bidder.email_user(subject, bidder_body)
                 return render(request, 'auctions/auction_ban.html', {'auction': auction})
             else:
                 messages.error(request, _("Auction is already banned"))

@@ -13,6 +13,15 @@ class AuctionManager(models.Manager):
     def get_all_banned(self):
         return self.filter(banned=True)
 
+    def get_all_due(self):
+        active_auctions = self.filter(banned=False)
+        due_auctions = []
+        for auction in active_auctions:
+            if auction.deadline < timezone.now():
+                auction.set_due()
+                due_auctions.append(auction)
+        return due_auctions
+
     def get_by_id(self, auction_id):
         return self.get(pk=auction_id)
 
@@ -37,7 +46,6 @@ class Auction(models.Model):
 
     banned = models.BooleanField(default=False)
     due = models.BooleanField(default=False)
-    #resolved = models.BooleanField(default=False)
 
     objects = AuctionManager()
 
@@ -75,8 +83,23 @@ class Auction(models.Model):
             return 0
         return self.get_latest_bid().bid_amount
 
+    def get_losers(self):
+        if not self.bid_set.all():
+            return None
+        losers = []
+        winner = self.get_latest_bidder()
+        bidders = self.bid_set.all()
+        for bidder in bidders:
+            if bidder is not winner:
+                losers.append(bidder)
+        return losers
+
     def ban(self):
         self.banned = True
+        self.save()
+
+    def set_due(self):
+        self.due = True
         self.save()
 
     def mail_seller(self, subject, message):

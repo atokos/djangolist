@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'accounts',
     'debug_toolbar',
     'autofixture',
-
 ]
 
 MIDDLEWARE = [
@@ -124,6 +123,8 @@ LANGUAGES = [
     ('en', 'English'),
     ('sv', 'Swedish'),
 ]
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 USE_L10N = True
 
