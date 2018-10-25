@@ -42,5 +42,4 @@ class AccountSetPreferencesForm(forms.ModelForm):
         model = UserPreference
         fields = {
             'language',
-            # 'currency',
         }

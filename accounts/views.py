@@ -87,8 +87,16 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            language_code = UserPreference.objects.get(user=user).language
-            set_language(request, language_code)
+            users = UserPreference.objects.filter(user=user)
+            if users:
+                language_code = users[0].language
+                set_language(request, language_code)
+            else:
+                preferences = UserPreference()
+                preferences.user = user
+                preferences.save()
+                language_code = UserPreference.objects.filter(user=user)
+                set_language(request, language_code)
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))
             else:
