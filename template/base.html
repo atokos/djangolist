@@ -29,18 +29,18 @@
                         <li><a href="{% url 'accounts:login' %}">{% trans "Log in" %}</a></li>
                         <li><a href="{% url 'accounts:signup' %}">{% trans "Sign up" %}</a></li>
                         <li>
-                            <p>{% trans "Currency" %}</p>
+                            <label>{% trans "Currency" %}</label>
                             <form action="{% url 'accounts:set_currency' %}" method="post">
                                 {% csrf_token %}
                                 <select name="currency" id="">
-                                    <option value="usd" {% if request.session.currency == usd %} selected {% endif %}>US Dollars ($)</option>
-                                    <option value="eur" {% if request.session.currency == eur %} selected {% endif %} >Euros (€)</option>
+                                    <option value="EUR" {% if request.session.currency == 'EUR' %} selected {% endif %} >Euros (€)</option>
+                                    <option value="USD" {% if request.session.currency == 'USD' %} selected {% endif %}>US Dollars ($)</option>
                                 </select>
                                 <input type="submit" value="{% trans "Save" %}">
                             </form>
                         </li>
                         <li>
-                            <p>{% trans "Language" %}</p>
+                            <label>{% trans "Language" %}</label>
                             <form action="{% url 'set_language' %}" method="post">
                                 {% csrf_token %}
                                 <select name="language" id="">

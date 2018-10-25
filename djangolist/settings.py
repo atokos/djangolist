@@ -41,6 +41,11 @@ INSTALLED_APPS = [
     'accounts',
     'debug_toolbar',
     'autofixture',
+    'django_cron',
+]
+
+CRON_CLASSES = [
+    "auctions.cron.AuctionResolveJob",
 ]
 
 MIDDLEWARE = [
@@ -111,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Helsinki'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 

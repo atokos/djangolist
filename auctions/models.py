@@ -153,14 +153,21 @@ class Bid(models.Model):
 
     def __str__(self):
         return self.bidder.username + ': ' + str(self.bid_amount)
-'''
-    def clean_bid_amount(self):
-        auction = self.auction
-        if auction.get_latest_bid():
-            if self.bid_amount < auction.get_latest_bid_amount() + Decimal('0.01'):
-                raise ValidationError("The bid must be at least 0.01 higher than the current bid")
-        if self.bid_amount < auction.minimum_bid:
-            raise ValidationError("The bid must be higher than the minimum bid")
-        return self.bid_amount
-'''
+
+
+class Currency(models.Model):
+    code = models.CharField(max_length=3)
+    rate = models.DecimalField(max_digits=8, decimal_places=6)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.code
+
+    def needs_update(self):
+        if timezone.now() - self.updated < timezone.timedelta(seconds=15):
+            return True
+        else:
+            return False
+
+
 

@@ -1,10 +1,11 @@
-import schedule
-
 from .models import Auction
+from datetime import datetime
+import requests
 
 
-def job(self):
-    print("Starting auction resolve cron job...")
+def resolve_auction_job():
+    timestamp = str(datetime.now())
+    print("[%s] Starting resolve job..." % timestamp)
     due_auctions = Auction.objects.get_all_due()
     for auction in due_auctions:
         if auction.get_latest_bidder() is not None:
@@ -33,7 +34,15 @@ def job(self):
 
         # The auction has no bids
         else:
+            print("Due action %d had no bids" % auction.title)
             seller = auction.seller
+            title = auction.title
             subject = "Your auction %d ended with no bids." % title
             body = "Unfortunately, your auction %d did not get any bids, and has now expired." % title
             seller.email_user(subject, body)
+
+
+
+
+
+
