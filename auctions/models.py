@@ -43,6 +43,7 @@ class Auction(models.Model):
     seller = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     minimum_bid = models.DecimalField(max_digits=8, decimal_places=2)
     deadline = models.DateTimeField()
+    version = models.IntegerField(default=1)
 
     banned = models.BooleanField(default=False)
     due = models.BooleanField(default=False)
@@ -101,9 +102,6 @@ class Auction(models.Model):
     def set_due(self):
         self.due = True
         self.save()
-
-    def convert_price(self, price, rate):
-        return price * rate
 
     def check_soft_deadline(self):
         if timezone.now() >= self.deadline - timezone.timedelta(minutes=5):
