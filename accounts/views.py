@@ -130,5 +130,5 @@ def set_language(request, language_code):
 
 def reset_language(request):
     if translation.LANGUAGE_SESSION_KEY in request.session:
-        del request.session[translation.LANGUAGE_SESSION_KEY]
+        request.session[translation.LANGUAGE_SESSION_KEY] = 'en'
 
