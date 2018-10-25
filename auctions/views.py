@@ -85,9 +85,34 @@ class AuctionConfirmCreationView(View):
 class AuctionDetailView(View):
 
     def get(self, request, auction_id):
+
         auction = Auction.objects.get_by_id(auction_id)
         if auction.is_active():
-            context = {'auction': auction}
+            if 'currency' in request.session:
+                currency = request.session['currency']
+            else:
+                currency = 'EUR'
+            if currency == 'EUR':
+                print('Currency EUR')
+                context = {
+                    'auction': auction,
+                    'title': auction.title,
+                    'minimum_bid': auction.minimum_bid,
+                    'latest_bid': auction.get_latest_bid_amount(),
+                }
+            else:
+                print('Currency USD')
+                currency = Currency.objects.get(code=currency)
+                rate = currency.rate
+                title = auction.title
+                minimum_bid = convert(auction.minimum_bid, rate)
+                latest_bid = convert(auction.get_latest_bid_amount(), rate)
+                context = {
+                    'auction': auction,
+                    'title': title,
+                    'minimum_bid': minimum_bid,
+                    'latest_bid': latest_bid,
+                }
             return render(request, 'auctions/auction_details.html', context)
         else:
             messages.error(request, _("Requested auction not found!"))
@@ -269,4 +294,8 @@ def fetch_exchange_rate(request):
     return render(request, 'auctions/exchange_rates.html', {'currency': usd_currency})
 
 
+def convert(amount, rate):
+    new_amount = amount * rate
+    output = round(new_amount, 2)
+    return output
 

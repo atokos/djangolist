@@ -102,42 +102,8 @@ class Auction(models.Model):
         self.due = True
         self.save()
 
-    def mail_seller(self, subject, message):
-        recipients = [self.seller.email]
-        send_mail(
-            subject,
-            message,
-            'noreply@djangolist.com',
-            recipients,
-            fail_silently=False
-        )
-
-    def mail_bidders(self, subject, message):
-        bids = self.bid_set.all()
-        bidder_emails = []
-
-        for bid in bids:
-            email = bid.bidder.email
-            bidder_emails.append(email)
-
-        send_mail(
-            subject,
-            message,
-            'noreply@djangolist.com',
-            bidder_emails,
-            fail_silently=False
-        )
-
-    def mail_latest_bidder(self, subject, message):
-        latest_bidder = self.get_latest_bidder()
-        recipients = [latest_bidder]
-        send_mail(
-            subject,
-            message,
-            'noreply@djangolist.com',
-            recipients,
-            fail_silently=False
-        )
+    def convert_price(self, price, rate):
+        return price * rate
 
     def check_soft_deadline(self):
         if timezone.now() >= self.deadline - timezone.timedelta(minutes=5):

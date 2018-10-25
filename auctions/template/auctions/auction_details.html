@@ -10,8 +10,8 @@
         {%  if auction.seller == request.user %}
             <a href="{% url 'auctions:edit' auction_id=auction.id %}">{% trans "Edit description" %}</a>
         {% endif %}
-            <p>{% trans "Starting price" %}: {{ auction.minimum_bid }}</p>
-            <p>{% trans "Latest bid" %}: {{ auction.get_latest_bid_amount }}</p>
+            <p>{% trans "Starting price" %}: {{ minimum_bid }}</p>
+            <p>{% trans "Latest bid" %}: {{ latest_bid }}</p>
             <p>{% trans "Deadline" %}: {{ auction.deadline }}</p>
         {% if user.is_authenticated %}
             <a href="{% url 'auctions:bid' auction_id=auction.id %}">{% trans "Bid" %}</a>

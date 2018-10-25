@@ -20,8 +20,6 @@
             <a href="{% url 'auctions:detail' auction_id=auction.id %}"><h2>{{ auction.title }}</h2></a>
             <p>{% trans "Seller" %}: {{ auction.seller }}</p>
             <p>{{ auction.description }}</p>
-            <p>{% trans "Starting price" %}: {{ auction.minimum_bid }}</p>
-            <p>{% trans "Latest bid" %}: {{ auction.get_latest_bid_amount }}</p>
             <p>{% trans "Deadline" %}: {{ auction.deadline }}</p>
         </div>
     {% endfor %}

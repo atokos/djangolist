@@ -3,9 +3,11 @@
 {% load i18n %}
 
 {% block content %}
-    <h2>{% trans "Bid on auction" %} {{ auction.title }}</h2
+    <h2>{% trans "Bid on auction" %} {{ auction.title }}</h2>
+    <!--
     <p>{% trans "Minimum bid" %}: {{ auction.minimum_bid }}</p>
-    <p>{% trans "Latest bid" %}Current highest bid: {{ auction.get_latest_bid_amount }}</p>
+    <p>{% trans "Latest bid" %}Current highest bid: {{ latest_bid }}</p>
+    -->
     <p>{% trans "Bids have to be 0.01 higher than the current highest bid" %}</p>
     <form method="post" action="{% url 'auctions:bid' auction_id=auction.id%}">
         {% csrf_token %}
