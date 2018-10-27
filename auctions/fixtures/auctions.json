@@ -1,0 +1,1292 @@
+[
+{
+    "model": "auctions.auction",
+    "pk": 1,
+    "fields": {
+        "title": "Test auction 0",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:45.890Z",
+        "modified": "2018-10-27T23:13:45.890Z",
+        "seller": 1,
+        "minimum_bid": "196.00",
+        "deadline": "2018-10-30T23:13:45.889Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 2,
+    "fields": {
+        "title": "Test auction 1",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:46.059Z",
+        "modified": "2018-10-27T23:13:46.059Z",
+        "seller": 2,
+        "minimum_bid": "40.00",
+        "deadline": "2018-10-30T23:13:46.059Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 3,
+    "fields": {
+        "title": "Test auction 2",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:46.231Z",
+        "modified": "2018-10-27T23:13:46.231Z",
+        "seller": 3,
+        "minimum_bid": "51.00",
+        "deadline": "2018-10-30T23:13:46.231Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 4,
+    "fields": {
+        "title": "Test auction 3",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:46.401Z",
+        "modified": "2018-10-27T23:13:46.401Z",
+        "seller": 4,
+        "minimum_bid": "160.00",
+        "deadline": "2018-10-30T23:13:46.400Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 5,
+    "fields": {
+        "title": "Test auction 4",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:46.572Z",
+        "modified": "2018-10-27T23:13:46.572Z",
+        "seller": 5,
+        "minimum_bid": "197.00",
+        "deadline": "2018-10-30T23:13:46.572Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 6,
+    "fields": {
+        "title": "Test auction 5",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:46.744Z",
+        "modified": "2018-10-27T23:13:46.744Z",
+        "seller": 6,
+        "minimum_bid": "104.00",
+        "deadline": "2018-10-30T23:13:46.744Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 7,
+    "fields": {
+        "title": "Test auction 6",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:46.914Z",
+        "modified": "2018-10-27T23:13:46.914Z",
+        "seller": 7,
+        "minimum_bid": "44.00",
+        "deadline": "2018-10-30T23:13:46.914Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 8,
+    "fields": {
+        "title": "Test auction 7",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:47.088Z",
+        "modified": "2018-10-27T23:13:47.088Z",
+        "seller": 8,
+        "minimum_bid": "190.00",
+        "deadline": "2018-10-30T23:13:47.087Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 9,
+    "fields": {
+        "title": "Test auction 8",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:47.263Z",
+        "modified": "2018-10-27T23:13:47.263Z",
+        "seller": 9,
+        "minimum_bid": "156.00",
+        "deadline": "2018-10-30T23:13:47.263Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 10,
+    "fields": {
+        "title": "Test auction 9",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:47.435Z",
+        "modified": "2018-10-27T23:13:47.435Z",
+        "seller": 10,
+        "minimum_bid": "125.00",
+        "deadline": "2018-10-30T23:13:47.434Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 11,
+    "fields": {
+        "title": "Test auction 10",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:47.610Z",
+        "modified": "2018-10-27T23:13:47.611Z",
+        "seller": 11,
+        "minimum_bid": "61.00",
+        "deadline": "2018-10-30T23:13:47.610Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 12,
+    "fields": {
+        "title": "Test auction 11",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:47.787Z",
+        "modified": "2018-10-27T23:13:47.787Z",
+        "seller": 12,
+        "minimum_bid": "71.00",
+        "deadline": "2018-10-30T23:13:47.787Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 13,
+    "fields": {
+        "title": "Test auction 12",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:47.963Z",
+        "modified": "2018-10-27T23:13:47.963Z",
+        "seller": 13,
+        "minimum_bid": "187.00",
+        "deadline": "2018-10-30T23:13:47.963Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 14,
+    "fields": {
+        "title": "Test auction 13",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:48.135Z",
+        "modified": "2018-10-27T23:13:48.135Z",
+        "seller": 14,
+        "minimum_bid": "101.00",
+        "deadline": "2018-10-30T23:13:48.135Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 15,
+    "fields": {
+        "title": "Test auction 14",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:48.309Z",
+        "modified": "2018-10-27T23:13:48.309Z",
+        "seller": 15,
+        "minimum_bid": "144.00",
+        "deadline": "2018-10-30T23:13:48.308Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 16,
+    "fields": {
+        "title": "Test auction 15",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:48.482Z",
+        "modified": "2018-10-27T23:13:48.482Z",
+        "seller": 16,
+        "minimum_bid": "105.00",
+        "deadline": "2018-10-30T23:13:48.482Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 17,
+    "fields": {
+        "title": "Test auction 16",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:48.653Z",
+        "modified": "2018-10-27T23:13:48.653Z",
+        "seller": 17,
+        "minimum_bid": "110.00",
+        "deadline": "2018-10-30T23:13:48.653Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 18,
+    "fields": {
+        "title": "Test auction 17",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:48.824Z",
+        "modified": "2018-10-27T23:13:48.824Z",
+        "seller": 18,
+        "minimum_bid": "74.00",
+        "deadline": "2018-10-30T23:13:48.824Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 19,
+    "fields": {
+        "title": "Test auction 18",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:48.997Z",
+        "modified": "2018-10-27T23:13:48.998Z",
+        "seller": 19,
+        "minimum_bid": "143.00",
+        "deadline": "2018-10-30T23:13:48.997Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 20,
+    "fields": {
+        "title": "Test auction 19",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:49.170Z",
+        "modified": "2018-10-27T23:13:49.170Z",
+        "seller": 20,
+        "minimum_bid": "169.00",
+        "deadline": "2018-10-30T23:13:49.170Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 21,
+    "fields": {
+        "title": "Test auction 20",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:49.340Z",
+        "modified": "2018-10-27T23:13:49.340Z",
+        "seller": 21,
+        "minimum_bid": "98.00",
+        "deadline": "2018-10-30T23:13:49.339Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 22,
+    "fields": {
+        "title": "Test auction 21",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:49.509Z",
+        "modified": "2018-10-27T23:13:49.509Z",
+        "seller": 22,
+        "minimum_bid": "76.00",
+        "deadline": "2018-10-30T23:13:49.508Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 23,
+    "fields": {
+        "title": "Test auction 22",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:49.683Z",
+        "modified": "2018-10-27T23:13:49.683Z",
+        "seller": 23,
+        "minimum_bid": "79.00",
+        "deadline": "2018-10-30T23:13:49.682Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 24,
+    "fields": {
+        "title": "Test auction 23",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:49.858Z",
+        "modified": "2018-10-27T23:13:49.858Z",
+        "seller": 24,
+        "minimum_bid": "94.00",
+        "deadline": "2018-10-30T23:13:49.857Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 25,
+    "fields": {
+        "title": "Test auction 24",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:50.031Z",
+        "modified": "2018-10-27T23:13:50.031Z",
+        "seller": 25,
+        "minimum_bid": "178.00",
+        "deadline": "2018-10-30T23:13:50.030Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 26,
+    "fields": {
+        "title": "Test auction 25",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:50.202Z",
+        "modified": "2018-10-27T23:13:50.202Z",
+        "seller": 26,
+        "minimum_bid": "60.00",
+        "deadline": "2018-10-30T23:13:50.201Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 27,
+    "fields": {
+        "title": "Test auction 26",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:50.376Z",
+        "modified": "2018-10-27T23:13:50.376Z",
+        "seller": 27,
+        "minimum_bid": "158.00",
+        "deadline": "2018-10-30T23:13:50.376Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 28,
+    "fields": {
+        "title": "Test auction 27",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:50.544Z",
+        "modified": "2018-10-27T23:13:50.544Z",
+        "seller": 28,
+        "minimum_bid": "179.00",
+        "deadline": "2018-10-30T23:13:50.544Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 29,
+    "fields": {
+        "title": "Test auction 28",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:50.718Z",
+        "modified": "2018-10-27T23:13:50.718Z",
+        "seller": 29,
+        "minimum_bid": "138.00",
+        "deadline": "2018-10-30T23:13:50.717Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 30,
+    "fields": {
+        "title": "Test auction 29",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:50.893Z",
+        "modified": "2018-10-27T23:13:50.893Z",
+        "seller": 30,
+        "minimum_bid": "110.00",
+        "deadline": "2018-10-30T23:13:50.892Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 31,
+    "fields": {
+        "title": "Test auction 30",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:51.070Z",
+        "modified": "2018-10-27T23:13:51.070Z",
+        "seller": 31,
+        "minimum_bid": "193.00",
+        "deadline": "2018-10-30T23:13:51.070Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 32,
+    "fields": {
+        "title": "Test auction 31",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:51.257Z",
+        "modified": "2018-10-27T23:13:51.257Z",
+        "seller": 32,
+        "minimum_bid": "82.00",
+        "deadline": "2018-10-30T23:13:51.257Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 33,
+    "fields": {
+        "title": "Test auction 32",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:51.431Z",
+        "modified": "2018-10-27T23:13:51.431Z",
+        "seller": 33,
+        "minimum_bid": "126.00",
+        "deadline": "2018-10-30T23:13:51.431Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 34,
+    "fields": {
+        "title": "Test auction 33",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:51.604Z",
+        "modified": "2018-10-27T23:13:51.604Z",
+        "seller": 34,
+        "minimum_bid": "111.00",
+        "deadline": "2018-10-30T23:13:51.604Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 35,
+    "fields": {
+        "title": "Test auction 34",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:51.773Z",
+        "modified": "2018-10-27T23:13:51.773Z",
+        "seller": 35,
+        "minimum_bid": "153.00",
+        "deadline": "2018-10-30T23:13:51.773Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 36,
+    "fields": {
+        "title": "Test auction 35",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:51.946Z",
+        "modified": "2018-10-27T23:13:51.947Z",
+        "seller": 36,
+        "minimum_bid": "191.00",
+        "deadline": "2018-10-30T23:13:51.946Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 37,
+    "fields": {
+        "title": "Test auction 36",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:52.117Z",
+        "modified": "2018-10-27T23:13:52.117Z",
+        "seller": 37,
+        "minimum_bid": "121.00",
+        "deadline": "2018-10-30T23:13:52.117Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 38,
+    "fields": {
+        "title": "Test auction 37",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:52.287Z",
+        "modified": "2018-10-27T23:13:52.287Z",
+        "seller": 38,
+        "minimum_bid": "161.00",
+        "deadline": "2018-10-30T23:13:52.287Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 39,
+    "fields": {
+        "title": "Test auction 38",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:52.459Z",
+        "modified": "2018-10-27T23:13:52.459Z",
+        "seller": 39,
+        "minimum_bid": "179.00",
+        "deadline": "2018-10-30T23:13:52.459Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 40,
+    "fields": {
+        "title": "Test auction 39",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:52.627Z",
+        "modified": "2018-10-27T23:13:52.627Z",
+        "seller": 40,
+        "minimum_bid": "161.00",
+        "deadline": "2018-10-30T23:13:52.627Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 41,
+    "fields": {
+        "title": "Test auction 40",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:52.800Z",
+        "modified": "2018-10-27T23:13:52.800Z",
+        "seller": 41,
+        "minimum_bid": "184.00",
+        "deadline": "2018-10-30T23:13:52.800Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 42,
+    "fields": {
+        "title": "Test auction 41",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:52.979Z",
+        "modified": "2018-10-27T23:13:52.979Z",
+        "seller": 42,
+        "minimum_bid": "105.00",
+        "deadline": "2018-10-30T23:13:52.979Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 43,
+    "fields": {
+        "title": "Test auction 42",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:53.151Z",
+        "modified": "2018-10-27T23:13:53.151Z",
+        "seller": 43,
+        "minimum_bid": "40.00",
+        "deadline": "2018-10-30T23:13:53.151Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 44,
+    "fields": {
+        "title": "Test auction 43",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:53.321Z",
+        "modified": "2018-10-27T23:13:53.321Z",
+        "seller": 44,
+        "minimum_bid": "107.00",
+        "deadline": "2018-10-30T23:13:53.321Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 45,
+    "fields": {
+        "title": "Test auction 44",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:53.496Z",
+        "modified": "2018-10-27T23:13:53.496Z",
+        "seller": 45,
+        "minimum_bid": "143.00",
+        "deadline": "2018-10-30T23:13:53.495Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 46,
+    "fields": {
+        "title": "Test auction 45",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:53.665Z",
+        "modified": "2018-10-27T23:13:53.665Z",
+        "seller": 46,
+        "minimum_bid": "189.00",
+        "deadline": "2018-10-30T23:13:53.665Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 47,
+    "fields": {
+        "title": "Test auction 46",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:53.840Z",
+        "modified": "2018-10-27T23:13:53.840Z",
+        "seller": 47,
+        "minimum_bid": "140.00",
+        "deadline": "2018-10-30T23:13:53.840Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 48,
+    "fields": {
+        "title": "Test auction 47",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:54.015Z",
+        "modified": "2018-10-27T23:13:54.015Z",
+        "seller": 48,
+        "minimum_bid": "140.00",
+        "deadline": "2018-10-30T23:13:54.014Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 49,
+    "fields": {
+        "title": "Test auction 48",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:54.185Z",
+        "modified": "2018-10-27T23:13:54.185Z",
+        "seller": 49,
+        "minimum_bid": "61.00",
+        "deadline": "2018-10-30T23:13:54.184Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.auction",
+    "pk": 50,
+    "fields": {
+        "title": "Test auction 49",
+        "description": "Lorem ipsum dolor sit amet",
+        "created": "2018-10-27T23:13:54.359Z",
+        "modified": "2018-10-27T23:13:54.359Z",
+        "seller": 50,
+        "minimum_bid": "125.00",
+        "deadline": "2018-10-30T23:13:54.359Z",
+        "version": 0,
+        "banned": false,
+        "due": false
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 1,
+    "fields": {
+        "created": "2018-10-27T23:13:46.045Z",
+        "auction": 1,
+        "bidder": 2,
+        "bid_amount": "206.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 2,
+    "fields": {
+        "created": "2018-10-27T23:13:46.217Z",
+        "auction": 2,
+        "bidder": 3,
+        "bid_amount": "50.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 3,
+    "fields": {
+        "created": "2018-10-27T23:13:46.389Z",
+        "auction": 3,
+        "bidder": 4,
+        "bid_amount": "61.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 4,
+    "fields": {
+        "created": "2018-10-27T23:13:46.559Z",
+        "auction": 4,
+        "bidder": 5,
+        "bid_amount": "170.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 5,
+    "fields": {
+        "created": "2018-10-27T23:13:46.731Z",
+        "auction": 5,
+        "bidder": 6,
+        "bid_amount": "207.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 6,
+    "fields": {
+        "created": "2018-10-27T23:13:46.902Z",
+        "auction": 6,
+        "bidder": 7,
+        "bid_amount": "114.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 7,
+    "fields": {
+        "created": "2018-10-27T23:13:47.076Z",
+        "auction": 7,
+        "bidder": 8,
+        "bid_amount": "54.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 8,
+    "fields": {
+        "created": "2018-10-27T23:13:47.250Z",
+        "auction": 8,
+        "bidder": 9,
+        "bid_amount": "200.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 9,
+    "fields": {
+        "created": "2018-10-27T23:13:47.422Z",
+        "auction": 9,
+        "bidder": 10,
+        "bid_amount": "166.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 10,
+    "fields": {
+        "created": "2018-10-27T23:13:47.598Z",
+        "auction": 10,
+        "bidder": 11,
+        "bid_amount": "135.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 11,
+    "fields": {
+        "created": "2018-10-27T23:13:47.774Z",
+        "auction": 11,
+        "bidder": 12,
+        "bid_amount": "71.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 12,
+    "fields": {
+        "created": "2018-10-27T23:13:47.949Z",
+        "auction": 12,
+        "bidder": 13,
+        "bid_amount": "81.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 13,
+    "fields": {
+        "created": "2018-10-27T23:13:48.121Z",
+        "auction": 13,
+        "bidder": 14,
+        "bid_amount": "197.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 14,
+    "fields": {
+        "created": "2018-10-27T23:13:48.294Z",
+        "auction": 14,
+        "bidder": 15,
+        "bid_amount": "111.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 15,
+    "fields": {
+        "created": "2018-10-27T23:13:48.468Z",
+        "auction": 15,
+        "bidder": 16,
+        "bid_amount": "154.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 16,
+    "fields": {
+        "created": "2018-10-27T23:13:48.639Z",
+        "auction": 16,
+        "bidder": 17,
+        "bid_amount": "115.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 17,
+    "fields": {
+        "created": "2018-10-27T23:13:48.809Z",
+        "auction": 17,
+        "bidder": 18,
+        "bid_amount": "120.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 18,
+    "fields": {
+        "created": "2018-10-27T23:13:48.983Z",
+        "auction": 18,
+        "bidder": 19,
+        "bid_amount": "84.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 19,
+    "fields": {
+        "created": "2018-10-27T23:13:49.156Z",
+        "auction": 19,
+        "bidder": 20,
+        "bid_amount": "153.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 20,
+    "fields": {
+        "created": "2018-10-27T23:13:49.325Z",
+        "auction": 20,
+        "bidder": 21,
+        "bid_amount": "179.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 21,
+    "fields": {
+        "created": "2018-10-27T23:13:49.496Z",
+        "auction": 21,
+        "bidder": 22,
+        "bid_amount": "108.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 22,
+    "fields": {
+        "created": "2018-10-27T23:13:49.666Z",
+        "auction": 22,
+        "bidder": 23,
+        "bid_amount": "86.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 23,
+    "fields": {
+        "created": "2018-10-27T23:13:49.843Z",
+        "auction": 23,
+        "bidder": 24,
+        "bid_amount": "89.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 24,
+    "fields": {
+        "created": "2018-10-27T23:13:50.018Z",
+        "auction": 24,
+        "bidder": 25,
+        "bid_amount": "104.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 25,
+    "fields": {
+        "created": "2018-10-27T23:13:50.188Z",
+        "auction": 25,
+        "bidder": 26,
+        "bid_amount": "188.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 26,
+    "fields": {
+        "created": "2018-10-27T23:13:50.362Z",
+        "auction": 26,
+        "bidder": 27,
+        "bid_amount": "70.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 27,
+    "fields": {
+        "created": "2018-10-27T23:13:50.532Z",
+        "auction": 27,
+        "bidder": 28,
+        "bid_amount": "168.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 28,
+    "fields": {
+        "created": "2018-10-27T23:13:50.703Z",
+        "auction": 28,
+        "bidder": 29,
+        "bid_amount": "189.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 29,
+    "fields": {
+        "created": "2018-10-27T23:13:50.880Z",
+        "auction": 29,
+        "bidder": 30,
+        "bid_amount": "148.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 30,
+    "fields": {
+        "created": "2018-10-27T23:13:51.057Z",
+        "auction": 30,
+        "bidder": 31,
+        "bid_amount": "120.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 31,
+    "fields": {
+        "created": "2018-10-27T23:13:51.228Z",
+        "auction": 31,
+        "bidder": 32,
+        "bid_amount": "203.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 32,
+    "fields": {
+        "created": "2018-10-27T23:13:51.417Z",
+        "auction": 32,
+        "bidder": 33,
+        "bid_amount": "92.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 33,
+    "fields": {
+        "created": "2018-10-27T23:13:51.590Z",
+        "auction": 33,
+        "bidder": 34,
+        "bid_amount": "136.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 34,
+    "fields": {
+        "created": "2018-10-27T23:13:51.760Z",
+        "auction": 34,
+        "bidder": 35,
+        "bid_amount": "121.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 35,
+    "fields": {
+        "created": "2018-10-27T23:13:51.933Z",
+        "auction": 35,
+        "bidder": 36,
+        "bid_amount": "163.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 36,
+    "fields": {
+        "created": "2018-10-27T23:13:52.103Z",
+        "auction": 36,
+        "bidder": 37,
+        "bid_amount": "201.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 37,
+    "fields": {
+        "created": "2018-10-27T23:13:52.275Z",
+        "auction": 37,
+        "bidder": 38,
+        "bid_amount": "131.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 38,
+    "fields": {
+        "created": "2018-10-27T23:13:52.447Z",
+        "auction": 38,
+        "bidder": 39,
+        "bid_amount": "171.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 39,
+    "fields": {
+        "created": "2018-10-27T23:13:52.615Z",
+        "auction": 39,
+        "bidder": 40,
+        "bid_amount": "189.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 40,
+    "fields": {
+        "created": "2018-10-27T23:13:52.786Z",
+        "auction": 40,
+        "bidder": 41,
+        "bid_amount": "171.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 41,
+    "fields": {
+        "created": "2018-10-27T23:13:52.966Z",
+        "auction": 41,
+        "bidder": 42,
+        "bid_amount": "194.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 42,
+    "fields": {
+        "created": "2018-10-27T23:13:53.137Z",
+        "auction": 42,
+        "bidder": 43,
+        "bid_amount": "115.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 43,
+    "fields": {
+        "created": "2018-10-27T23:13:53.309Z",
+        "auction": 43,
+        "bidder": 44,
+        "bid_amount": "50.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 44,
+    "fields": {
+        "created": "2018-10-27T23:13:53.483Z",
+        "auction": 44,
+        "bidder": 45,
+        "bid_amount": "117.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 45,
+    "fields": {
+        "created": "2018-10-27T23:13:53.651Z",
+        "auction": 45,
+        "bidder": 46,
+        "bid_amount": "153.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 46,
+    "fields": {
+        "created": "2018-10-27T23:13:53.827Z",
+        "auction": 46,
+        "bidder": 47,
+        "bid_amount": "199.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 47,
+    "fields": {
+        "created": "2018-10-27T23:13:53.999Z",
+        "auction": 47,
+        "bidder": 48,
+        "bid_amount": "150.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 48,
+    "fields": {
+        "created": "2018-10-27T23:13:54.172Z",
+        "auction": 48,
+        "bidder": 49,
+        "bid_amount": "150.00"
+    }
+},
+{
+    "model": "auctions.bid",
+    "pk": 49,
+    "fields": {
+        "created": "2018-10-27T23:13:54.345Z",
+        "auction": 49,
+        "bidder": 50,
+        "bid_amount": "71.00"
+    }
+}
+]
