@@ -4,10 +4,8 @@
 
 {% block content %}
     <h2>{% trans "Bid on auction" %} {{ auction.title }}</h2>
-    <!--
-    <p>{% trans "Minimum bid" %}: {{ auction.minimum_bid }}</p>
-    <p>{% trans "Latest bid" %}Current highest bid: {{ latest_bid }}</p>
-    -->
+    <p>{% trans "Minimum bid" %}: {{ auction.minimum_bid }} EUR {% if currency == 'USD' %}({{ converted_min_bid }} {{ currency }}) {% endif %}</p>
+    <p>{% trans "Latest bid" %}: {{ auction.get_latest_bid_amount }} EUR {% if currency == 'USD' %}({{ latest_bid }} {{ currency }}) {% endif %}</p>
     <p>{% trans "Bids have to be 0.01 higher than the current highest bid" %}</p>
     <form method="post" action="{% url 'auctions:bid' auction_id=auction.id%}">
         {% csrf_token %}

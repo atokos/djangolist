@@ -92,25 +92,19 @@ class AuctionDetailView(View):
         else:
             currency = 'EUR'
         if currency == 'EUR':
-            print('Currency EUR')
             context = {
                 'auction': auction,
-                'title': auction.title,
-                'minimum_bid': auction.minimum_bid,
                 'latest_bid': auction.get_latest_bid_amount(),
+                'currency': currency
             }
         else:
-            print('Currency USD')
-            currency = Currency.objects.get(code=currency)
-            rate = currency.rate
-            title = auction.title
-            minimum_bid = convert(auction.minimum_bid, rate)
-            latest_bid = convert(auction.get_latest_bid_amount(), rate)
+            rate = Currency.objects.get(code=currency).rate
+            converted_min_bid = convert(auction.minimum_bid, rate)
             context = {
                 'auction': auction,
-                'title': title,
-                'minimum_bid': minimum_bid,
-                'latest_bid': latest_bid,
+                'converted_min_bid': converted_min_bid,
+                'latest_bid': convert(auction.get_latest_bid_amount(), rate),
+                'currency': currency
             }
         return render(request, 'auctions/auction_details.html', context)
 
@@ -129,10 +123,27 @@ class AuctionBidView(View):
             messages.error(request, _("Cannot bid on winning auction!"))
             return redirect(auction)
         form = AuctionBidForm()
-        context = {
-            'auction': auction,
-            'form': form,
-        }
+        if 'currency' in request.session:
+            currency = request.session['currency']
+        else:
+            currency = 'EUR'
+        if currency == 'EUR':
+            context = {
+                'auction': auction,
+                'latest_bid': auction.get_latest_bid_amount(),
+                'form': form,
+                'currency': currency
+            }
+        else:
+            rate = Currency.objects.get(code=currency).rate
+            converted_min_bid = convert(auction.minimum_bid, rate)
+            context = {
+                'auction': auction,
+                'converted_min_bid': converted_min_bid,
+                'latest_bid': convert(auction.get_latest_bid_amount(), rate),
+                'form': form,
+                'currency': currency
+            }
         return render(request, 'auctions/auction_bid.html', context)
 
     def post(self, request, auction_id):
