@@ -95,7 +95,7 @@ def login_view(request):
                 preferences = UserPreference()
                 preferences.user = user
                 preferences.save()
-                language_code = UserPreference.objects.filter(user=user)
+                language_code = preferences.language
                 set_language(request, language_code)
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))
