@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.conf import settings
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -10,6 +9,7 @@ import threading
 
 from auctions import jobs
 from auctions.api import *
+from .views import generate_data
 
 
 def run_continuosly(sch, interval=1):
@@ -36,15 +36,10 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('api/auctions/', auction_list , name='api-list'),
     path('api/auctions/<int:auction_id>', auction_detail, name='api-detail'),
+    path('generatedata/', generate_data, name='generatedata'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
-
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
 
 
 
