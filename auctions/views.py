@@ -3,6 +3,8 @@ from django.views import View
 from django.contrib import messages
 from decimal import Decimal
 from django.utils.translation import gettext as _
+from django.utils.dateparse import parse_datetime
+from django.utils import timezone
 
 from .models import Auction, Bid, Currency
 from .forms import AuctionCreateForm, AuctionsConfirmCreationForm, AuctionEditForm, AuctionBidForm
@@ -58,7 +60,9 @@ class AuctionConfirmCreationView(View):
             title = request.POST.get('title')
             description = request.POST.get('description', '')
             minimum_bid = request.POST.get('minimum_bid', '')
-            deadline = request.POST.get('deadline', '')
+            deadline_str = request.POST.get('deadline', '')
+            deadline = parse_datetime(deadline_str)
+            deadline = deadline.replace(tzinfo=timezone.get_current_timezone())
             seller = request.user
             auction = Auction(
                 title=title,
