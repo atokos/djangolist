@@ -8,6 +8,7 @@ from auctions.models import Auction, Bid
 
 
 class CreateAuctionTest(TestCase):
+    fixtures = ['auction']
 
     def test_valid_create(self):
         self.user = User.objects.create_user(username="testuser", password="1234")
