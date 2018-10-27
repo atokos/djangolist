@@ -84,6 +84,9 @@ class Auction(models.Model):
             return 0
         return Decimal(self.get_latest_bid().bid_amount)
 
+    def get_bid_list(self):
+        return self.bid_set.all().order_by('created')
+
     def get_losers(self):
         if not self.bid_set.all():
             return None

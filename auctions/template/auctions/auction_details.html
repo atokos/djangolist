@@ -13,6 +13,12 @@
         <p>{% trans "Starting price" %}: {{ auction.minimum_bid }} EUR {% if currency == 'USD' %}({{ converted_min_bid }} {{ currency }}) {% endif %}</p>
         <p>{% trans "Latest bid" %}: {{ auction.get_latest_bid_amount }} EUR {% if currency == 'USD' %}({{ latest_bid }} {{ currency }}) {% endif %}</p>
         <p>{% trans "Deadline" %}: {{ auction.deadline }}</p>
+        <h3>{% trans "Bids" %}</h3>
+        <ul>
+            {% for bid in auction.get_bid_list %}
+                <li>{{ bid.created }} - {{ bid.bid_amount }} EUR {% trans "by" %}: {{ bid.bidder }} </li>
+            {% endfor %}
+        </ul>
         {% if user.is_authenticated %}
             <a href="{% url 'auctions:bid' auction_id=auction.id %}">{% trans "Bid" %}</a>
         {% endif %}
