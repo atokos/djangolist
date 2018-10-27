@@ -9,21 +9,21 @@ def resolve_auction_job():
     due_auctions = Auction.objects.get_all_due()
     for auction in due_auctions:
         if auction.get_latest_bidder() is not None:
-            print("Resolving auction %d" % auction.title)
+            print("Resolving auction %s" % auction.title)
 
             title = auction.title
             seller = auction.seller
             winner = auction.get_latest_bidder()
             winning_bid = auction.get_latest_bid_amount()
 
-            seller_subject = "Your auction %d has been resolved" % title
-            seller_body = "Congratulations, your auction has been resolved!\n\nThe winner is %d, with a bid of %d €" % winner, winning_bid
+            seller_subject = "Your auction %s has been resolved" % title
+            seller_body = "Congratulations, your auction has been resolved!\n\nThe winner is %s, with a bid of %d €" % winner, winning_bid
 
-            winner_subject = "You have won the auction %d" % title
-            winner_body = "Congratulations, you have won the auction %d with your bid of %d" % title, winning_bid
+            winner_subject = "You have won the auction %s" % title
+            winner_body = "Congratulations, you have won the auction %s with your bid of %d" % title, winning_bid
 
-            loser_subject = "The Auction %d has been resolved." % title
-            loser_body = "Unfortunately, the auction %d that you bid on was won by someone else." % title
+            loser_subject = "The Auction %s has been resolved." % title
+            loser_body = "Unfortunately, the auction %s that you bid on was won by someone else." % title
 
             losers = Auction.objects.get_losers()
 
@@ -34,11 +34,11 @@ def resolve_auction_job():
 
         # The auction has no bids
         else:
-            print("Due action %d had no bids" % auction.title)
+            print("Due action %s had no bids" % auction.title)
             seller = auction.seller
             title = auction.title
-            subject = "Your auction %d ended with no bids." % title
-            body = "Unfortunately, your auction %d did not get any bids, and has now expired." % title
+            subject = "Your auction %s ended with no bids." % title
+            body = "Unfortunately, your auction %s did not get any bids, and has now expired." % title
             seller.email_user(subject, body)
 
 
