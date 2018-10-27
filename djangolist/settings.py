@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'auctions',
     'accounts',
     'debug_toolbar',
-    'autofixture',
-    'django_cron',
+    'rest_framework',
 ]
 
 CRON_CLASSES = [

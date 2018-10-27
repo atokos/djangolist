@@ -9,6 +9,7 @@ import time
 import threading
 
 from auctions import jobs
+from auctions.api import *
 
 
 def run_continuosly(sch, interval=1):
@@ -33,7 +34,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auctions/', include('auctions.urls')),
     path('accounts/', include('accounts.urls')),
-
+    path('api/auctions/', auction_list , name='api-list'),
+    path('api/auctions/<int:auction_id>', auction_detail, name='api-detail'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
