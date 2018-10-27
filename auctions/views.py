@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_list_or_404
 from django.views import View
 from django.contrib import messages
 from django.http import HttpResponseNotFound
@@ -17,7 +17,7 @@ class AuctionListView(View):
         auctions = Auction.objects.get_all_active()
         if 'title' in request.GET:
             title = request.GET['title']
-            results = Auction.objects.get_by_title(title=title)
+            results = get_list_or_404(Auction, title=title, banned=False, due=False)
             context = {
                 'auctions': results,
                 'title': title
@@ -72,8 +72,8 @@ class AuctionConfirmCreationView(View):
             auction.save()
             messages.success(request, _("New auction has been created"))
 
-            subject = "New Auction %d created!" % title
-            body = "The new auction named %d was successfully created." % title
+            subject = "New Auction %s created!" % title
+            body = "The new auction named %s was successfully created." % title
             seller.email_user(subject, body)
 
             return redirect(auction)
@@ -154,25 +154,25 @@ class AuctionBidView(View):
             bid_amount = form.cleaned_data.get('bid_amount')
 
             if version is not auction.version:
-                messages.error(_("The description or price has been updated before you put the bid, try to bid again"))
-                return redirect(reverse('auctions:bid', args=[str(auction_id)]))
-            if bid_amount <= auction.get_latest_bid_amount() + Decimal('0.005'):
+                messages.error(_("The description has been updated before you put the bid, try to bid again"))
+                return redirect(reverse(auction))
+            if bid_amount < auction.get_latest_bid_amount() + Decimal('0.01'):
                 messages.error(request, _("The bid must be at least 0.01 higher than the current bid"))
                 return redirect(reverse('auctions:bid', args=[str(auction_id)]))
-            if bid_amount < auction.minimum_bid:
+            if bid_amount < auction.minimum_bid + Decimal('0.01'):
                 messages.error(request, _("The bid must be higher than the minimum bid"))
                 return redirect(reverse('auctions:bid', args=[str(auction_id)]))
 
             # Mail seller and latest bidder
             seller = auction.seller
-            bidders = auction.bid_set.all()
+            bids = auction.bid_set.all()
             title = auction.title
-            subject = "New Bid on auction %d" % title
-            seller_body = "A new bid has been placed on your auction %d." % title
-            bidder_body = "A new bid has been placed on the auction %d, that you have bid on." % title
+            subject = "New Bid on auction %s" % title
+            seller_body = "A new bid has been placed on your auction %s." % title
+            bidder_body = "A new bid has been placed on the auction %s, that you have bid on." % title
             seller.email_user(subject, seller_body)
-            for bidder in bidders:
-                bidder.email_user(subject, bidder_body)
+            for bid in bids:
+                bid.bidder.email_user(subject, bidder_body)
 
             # Create and save new Bid
             new_bid = Bid()
@@ -214,7 +214,7 @@ class AuctionEditView(View):
     def post(self, request, auction_id):
         auction = Auction.objects.get_by_id(auction_id)
         if not auction.is_active():
-            messages.error(_("The auction you tried to edit is not available"))
+            messages.info(request, _("The auction you tried to edit is not available"))
             return redirect(reverse('auctions:list'))
         if not auction.seller == request.user:
             messages.info(request, _("You are not allowed to edit this auction."))
@@ -245,14 +245,14 @@ class AuctionBanView(View):
         auction.ban()
         # Mail seller and bidders
         seller = auction.seller
-        bidders = auction.bid_set.all()
+        bids = auction.bid_set.all()
         title = auction.title
-        subject = "Auction %d banned" % title
-        seller_body = "Your auction %d has been banned for breaking the rules." % title
-        bidder_body = "The auction %d, that you have bid on has been banned." % title
+        subject = "Auction %s banned" % title
+        seller_body = "Your auction %s has been banned for breaking the rules." % title
+        bidder_body = "The auction %s, that you have bid on has been banned." % title
         seller.email_user(subject, seller_body)
-        for bidder in bidders:
-            bidder.email_user(subject, bidder_body)
+        for bid in bids:
+            bid.bidder.email_user(subject, bidder_body)
         return render(request, 'auctions/auction_ban.html', {'auction': auction})
 
 

@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
-from django.core.mail import send_mail
+from decimal import Decimal
 
 
 class AuctionManager(models.Manager):
@@ -82,7 +82,7 @@ class Auction(models.Model):
     def get_latest_bid_amount(self):
         if not self.bid_set.all():
             return 0
-        return self.get_latest_bid().bid_amount
+        return Decimal(self.get_latest_bid().bid_amount)
 
     def get_losers(self):
         if not self.bid_set.all():
@@ -107,7 +107,6 @@ class Auction(models.Model):
         if timezone.now() >= self.deadline - timezone.timedelta(minutes=5):
             self.deadline += timezone.timedelta(minutes=5)
             self.save()
-
 
 class Bid(models.Model):
     created = models.DateTimeField(auto_now_add=True)
