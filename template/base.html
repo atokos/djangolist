@@ -29,17 +29,6 @@
                         <li><a href="{% url 'accounts:login' %}">{% trans "Log in" %}</a></li>
                         <li><a href="{% url 'accounts:signup' %}">{% trans "Sign up" %}</a></li>
                         <li>
-                            <label>{% trans "Currency" %}</label>
-                            <form action="{% url 'accounts:set_currency' %}" method="post">
-                                {% csrf_token %}
-                                <select name="currency" id="">
-                                    <option value="EUR" {% if request.session.currency == 'EUR' %} selected {% endif %} >Euros (€)</option>
-                                    <option value="USD" {% if request.session.currency == 'USD' %} selected {% endif %}>US Dollars ($)</option>
-                                </select>
-                                <input type="submit" value="{% trans "Save" %}">
-                            </form>
-                        </li>
-                        <li>
                             <label>{% trans "Language" %}</label>
                             <form action="{% url 'set_language' %}" method="post">
                                 {% csrf_token %}
@@ -56,6 +45,17 @@
                             </form>
                         </li>
                     {% endif %}
+                        <li>
+                            <label>{% trans "Currency" %}</label>
+                            <form action="{% url 'accounts:set_currency' %}" method="post">
+                                {% csrf_token %}
+                                <select name="currency" id="">
+                                    <option value="EUR" {% if request.session.currency == 'EUR' %} selected {% endif %} >Euros (€)</option>
+                                    <option value="USD" {% if request.session.currency == 'USD' %} selected {% endif %}>US Dollars ($)</option>
+                                </select>
+                                <input type="submit" value="{% trans "Save" %}">
+                            </form>
+                        </li>
                         <li><a href="{% url 'auctions:list'  %}">{% trans "Browse auctions" %}</a></li>
                     {% if perms.auctions.view_banned_auctions %}
                         <li><a href="{% url 'auctions:banned-list'  %}">{% trans "View banned auctions" %}</a></li>
