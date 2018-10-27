@@ -10,14 +10,12 @@ from .views import (
     AuctionBidView,
     AuctionBanView,
     AuctionBannedListView,
-    fetch_exchange_rate,
 )
 
 app_name = 'auctions'
 
 urlpatterns = [
     path('', AuctionListView.as_view(), name='list'),
-    path('currency/', fetch_exchange_rate, name='currency'),
     path('banned/', AuctionBannedListView.as_view(), name='banned-list'),
     path('create/', login_required(AuctionCreateView.as_view()), name='create'),
     path('confirm/', login_required(AuctionConfirmCreationView.as_view()), name='confirm'),

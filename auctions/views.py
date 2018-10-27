@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect, reverse, get_list_or_404
 from django.views import View
 from django.contrib import messages
-from django.http import HttpResponseNotFound
 from decimal import Decimal
 from django.utils.translation import gettext as _
-import requests
 
 from .models import Auction, Bid, Currency
 from .forms import AuctionCreateForm, AuctionsConfirmCreationForm, AuctionEditForm, AuctionBidForm
@@ -265,37 +263,6 @@ class AuctionBannedListView(View):
         else:
             messages.error(request, _("Permission denied"))
             return redirect(reverse('auctions:list'))
-
-
-def fetch_exchange_rate(request):
-
-    url = "http://data.fixer.io/api/latest?access_key=17098bafbbb0f9b7367efc764c279311&symbols=USD"
-
-    currencies = Currency.objects.filter(code='USD')
-    if not currencies:
-        response = requests.get(url)
-        response_dict = response.json()
-        usd_currency = Currency()
-        usd_currency.rate = response_dict['rates']['USD']
-        usd_currency.code = 'USD'
-        usd_currency.save()
-
-    usd_currency = currencies[0]
-    if usd_currency.needs_update():
-        print("inside loop")
-        response = requests.get(url)
-        response_dict = response.json()
-
-        usd_currency.rate = response_dict['rates']['USD']
-        usd_currency.code = 'USD'
-        usd_currency.updated.now()
-        usd_currency.save()
-
-        messages.success(request, _("Currency updated"))
-    else:
-        messages.info(request, _("Currency does not need updating"))
-
-    return render(request, 'auctions/exchange_rates.html', {'currency': usd_currency})
 
 
 def convert(amount, rate):

@@ -1,4 +1,4 @@
-from .models import Auction
+from .models import Auction, Currency
 from datetime import datetime
 import requests
 
@@ -42,6 +42,31 @@ def resolve_auction_job():
             seller.email_user(subject, body)
 
 
+def fetch_exchange_rate_job(request):
+    timestamp = str(datetime.now())
+    print("[%s] Fetching currency..." % timestamp)
+
+    url = "http://data.fixer.io/api/latest?access_key=17098bafbbb0f9b7367efc764c279311&symbols=USD"
+
+    currencies = Currency.objects.filter(code='USD')
+    if not currencies:
+        response = requests.get(url)
+        response_dict = response.json()
+        usd_currency = Currency()
+        usd_currency.rate = response_dict['rates']['USD']
+        usd_currency.code = 'USD'
+        usd_currency.save()
+
+    usd_currency = currencies[0]
+    if usd_currency.needs_update():
+        print("inside loop")
+        response = requests.get(url)
+        response_dict = response.json()
+
+        usd_currency.rate = response_dict['rates']['USD']
+        usd_currency.code = 'USD'
+        usd_currency.updated.now()
+        usd_currency.save()
 
 
 
