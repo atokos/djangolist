@@ -85,109 +85,113 @@ class AuctionConfirmCreationView(View):
 class AuctionDetailView(View):
 
     def get(self, request, auction_id):
-
         auction = Auction.objects.get_by_id(auction_id)
-        if auction.is_active():
-            if 'currency' in request.session:
-                currency = request.session['currency']
-            else:
-                currency = 'EUR'
-            if currency == 'EUR':
-                print('Currency EUR')
-                context = {
-                    'auction': auction,
-                    'title': auction.title,
-                    'minimum_bid': auction.minimum_bid,
-                    'latest_bid': auction.get_latest_bid_amount(),
-                }
-            else:
-                print('Currency USD')
-                currency = Currency.objects.get(code=currency)
-                rate = currency.rate
-                title = auction.title
-                minimum_bid = convert(auction.minimum_bid, rate)
-                latest_bid = convert(auction.get_latest_bid_amount(), rate)
-                context = {
-                    'auction': auction,
-                    'title': title,
-                    'minimum_bid': minimum_bid,
-                    'latest_bid': latest_bid,
-                }
-            return render(request, 'auctions/auction_details.html', context)
-        else:
+        if not auction.is_active():
             messages.error(request, _("Requested auction not found!"))
             return redirect(reverse('auctions:list'))
+        if 'currency' in request.session:
+            currency = request.session['currency']
+        else:
+            currency = 'EUR'
+        if currency == 'EUR':
+            print('Currency EUR')
+            context = {
+                'auction': auction,
+                'title': auction.title,
+                'minimum_bid': auction.minimum_bid,
+                'latest_bid': auction.get_latest_bid_amount(),
+            }
+        else:
+            print('Currency USD')
+            currency = Currency.objects.get(code=currency)
+            rate = currency.rate
+            title = auction.title
+            minimum_bid = convert(auction.minimum_bid, rate)
+            latest_bid = convert(auction.get_latest_bid_amount(), rate)
+            context = {
+                'auction': auction,
+                'title': title,
+                'minimum_bid': minimum_bid,
+                'latest_bid': latest_bid,
+            }
+        return render(request, 'auctions/auction_details.html', context)
 
 
 class AuctionBidView(View):
 
     def get(self, request, auction_id):
         auction = Auction.objects.get_by_id(auction_id)
-        if auction.is_active():
-            if request.user == auction.seller:
-                messages.error(request, _("Cannot bid on own auctions!"))
-                return redirect(auction)
-            if request.user == auction.get_latest_bidder():
-                messages.error(request, _("Cannot bid on winning auction!"))
-                return redirect(auction)
-            form = AuctionBidForm()
-            context = {
-                'auction': auction,
-                'form': form,
-            }
-            return render(request, 'auctions/auction_bid.html', context)
-        else:
+        if not auction.is_active():
             messages.error(request, _("Requested auction not found!"))
             return redirect(reverse('auctions:list'))
+        if request.user == auction.seller:
+            messages.error(request, _("Cannot bid on own auctions!"))
+            return redirect(auction)
+        if request.user == auction.get_latest_bidder():
+            messages.error(request, _("Cannot bid on winning auction!"))
+            return redirect(auction)
+        form = AuctionBidForm()
+        context = {
+            'auction': auction,
+            'form': form,
+        }
+        return render(request, 'auctions/auction_bid.html', context)
 
     def post(self, request, auction_id):
         auction = Auction.objects.get_by_id(auction_id)
-        if auction.is_active():
-            if request.user == auction.seller:
-                messages.error(request, _("Cannot bid on own auctions!"))
-                return redirect(auction)
-            if request.user == auction.get_latest_bidder():
-                messages.error(request, _("Cannot bid on winning auction!"))
-                return redirect(auction)
-            if auction.is_active():
-                form = AuctionBidForm(request.POST)
-                if form.is_valid():
-                    bid_amount = form.cleaned_data.get('bid_amount')
-                    if bid_amount <= auction.get_latest_bid_amount() + Decimal('0.005'):
-                        messages.error(request, _("The bid must be at least 0.01 higher than the current bid"))
-                        return redirect(reverse('auctions:bid', args=[str(auction_id)]))
-                    if bid_amount < auction.minimum_bid:
-                        messages.error(request, _("The bid must be higher than the minimum bid"))
-                        return redirect(reverse('auctions:bid', args=[str(auction_id)]))
-
-                    # Mail seller and latest bidder
-                    seller = auction.seller
-                    bidders = auction.bid_set.all()
-                    title = auction.title
-                    subject = "New Bid on auction %d" % title
-                    seller_body = "A new bid has been placed on your auction %d." % title
-                    bidder_body = "A new bid has been placed on the auction %d, that you have bid on." % title
-                    seller.email_user(subject, seller_body)
-                    for bidder in bidders:
-                        bidder.email_user(subject, bidder_body)
-
-                    # Create and save new Bid
-                    new_bid = Bid()
-                    new_bid.bid_amount = bid_amount
-                    new_bid.auction = auction
-                    new_bid.bidder = request.user
-                    new_bid.save()
-
-                    # Extend deadline if the bid is placed 5 minutes within the deadline
-                    auction.check_soft_deadline()
-                    messages.success(request, _("The bid was created."))
-                    return redirect(auction)
-                else:
-                    messages.error(request, _("Invalid bid."))
-                    return redirect(auction)
-        else:
-            messages.error(request, _("Requested auction not found!"))
+        if not auction.is_active():
+            messages.error(_("The auction you tried to bid on is not available anymore"))
             return redirect(reverse('auctions:list'))
+        if request.user == auction.seller:
+            messages.error(request, _("Cannot bid on own auctions!"))
+            return redirect(auction)
+        if request.user == auction.get_latest_bidder():
+            messages.error(request, _("Cannot bid on winning auction!"))
+            return redirect(auction)
+        form = AuctionBidForm(request.POST)
+        if form.is_valid():
+            version = int(request.POST['version'])
+            bid_amount = form.cleaned_data.get('bid_amount')
+
+            if version is not auction.version:
+                messages.error(_("The description or price has been updated before you put the bid, try to bid again"))
+                return redirect(reverse('auctions:bid', args=[str(auction_id)]))
+            if bid_amount <= auction.get_latest_bid_amount() + Decimal('0.005'):
+                messages.error(request, _("The bid must be at least 0.01 higher than the current bid"))
+                return redirect(reverse('auctions:bid', args=[str(auction_id)]))
+            if bid_amount < auction.minimum_bid:
+                messages.error(request, _("The bid must be higher than the minimum bid"))
+                return redirect(reverse('auctions:bid', args=[str(auction_id)]))
+
+            # Mail seller and latest bidder
+            seller = auction.seller
+            bidders = auction.bid_set.all()
+            title = auction.title
+            subject = "New Bid on auction %d" % title
+            seller_body = "A new bid has been placed on your auction %d." % title
+            bidder_body = "A new bid has been placed on the auction %d, that you have bid on." % title
+            seller.email_user(subject, seller_body)
+            for bidder in bidders:
+                bidder.email_user(subject, bidder_body)
+
+            # Create and save new Bid
+            new_bid = Bid()
+            new_bid.bid_amount = bid_amount
+            new_bid.auction = auction
+            new_bid.bidder = request.user
+            new_bid.save()
+
+            # Update auction version
+            auction.version += 1
+            auction.save()
+
+            # Extend deadline if the bid is placed 5 minutes within the deadline
+            auction.check_soft_deadline()
+            messages.success(request, _("The bid was created."))
+            return redirect(auction)
+        else:
+            messages.error(request, _("Invalid bid."))
+            return redirect(auction)
 
 
 class AuctionEditView(View):
@@ -195,61 +199,61 @@ class AuctionEditView(View):
 
     def get(self, request, auction_id):
         auction = Auction.objects.get_by_id(auction_id)
-        if auction.is_active():
-            if not auction.seller == request.user:
-                messages.info(request, _("You are not allowed to edit this auction."))
-                return redirect(auction)
-            else:
-                form = AuctionEditForm(instance=auction)
-                context = {'form': form,
-                           'auction': auction}
-                return render(request, self.template_name, context)
+        if not auction.is_active():
+            messages.error(_("The auction you tried to edit is not available"))
+            return redirect(reverse('auctions:list'))
+        if not auction.seller == request.user:
+            messages.info(request, _("You are not allowed to edit this auction."))
+            return redirect(auction)
         else:
-            return HttpResponseNotFound
+            form = AuctionEditForm(instance=auction)
+            context = {'form': form,
+                       'auction': auction}
+            return render(request, self.template_name, context)
 
     def post(self, request, auction_id):
         auction = Auction.objects.get_by_id(auction_id)
-        if auction.is_active():
-            if not auction.seller == request.user:
-                messages.info(request, _("You are not allowed to edit this auction."))
-                return redirect(auction)
-            else:
-                form = AuctionEditForm(request.POST, instance=auction)
-                if form.is_valid():
-                    auction = form.save()
-                    return redirect(auction)
-                context = {'form': form,
-                           'auction': auction}
-                return render(request, self.template_name, context)
+        if not auction.is_active():
+            messages.error(_("The auction you tried to edit is not available"))
+            return redirect(reverse('auctions:list'))
+        if not auction.seller == request.user:
+            messages.info(request, _("You are not allowed to edit this auction."))
+            return redirect(auction)
         else:
-            return HttpResponseNotFound
+            form = AuctionEditForm(request.POST, instance=auction)
+            if form.is_valid():
+                auction = form.save(commit=False)
+                auction.version += 1
+                auction.save()
+
+                return redirect(auction)
+            context = {'form': form,
+                       'auction': auction}
+            return render(request, self.template_name, context)
 
 
 class AuctionBanView(View):
 
     def get(self, request, auction_id):
-        if request.user.has_perm("auctions.ban_auction"):
-            auction = Auction.objects.get_by_id(auction_id)
-            if auction.is_active():
-                auction.ban()
-
-                # Mail seller and bidders
-                seller = auction.seller
-                bidders = auction.bid_set.all()
-                title = auction.title
-                subject = "Auction %d banned" % title
-                seller_body = "Your auction %d has been banned for breaking the rules." % title
-                bidder_body = "The auction %d, that you have bid on has been banned." % title
-                seller.email_user(subject, seller_body)
-                for bidder in bidders:
-                    bidder.email_user(subject, bidder_body)
-                return render(request, 'auctions/auction_ban.html', {'auction': auction})
-            else:
-                messages.error(request, _("Auction is already banned"))
-                return redirect(reverse('auctions:list'))
-        else:
+        if not request.user.has_perm("auctions.ban_auction"):
             messages.error(request, _("Permission denied"))
             return redirect(reverse('auctions:list'))
+        auction = Auction.objects.get_by_id(auction_id)
+        if not auction.is_active():
+            messages.error(request, _("Auction is already banned or due"))
+            return redirect(reverse('auctions:list'))
+        auction.ban()
+        # Mail seller and bidders
+        seller = auction.seller
+        bidders = auction.bid_set.all()
+        title = auction.title
+        subject = "Auction %d banned" % title
+        seller_body = "Your auction %d has been banned for breaking the rules." % title
+        bidder_body = "The auction %d, that you have bid on has been banned." % title
+        seller.email_user(subject, seller_body)
+        for bidder in bidders:
+            bidder.email_user(subject, bidder_body)
+        return render(request, 'auctions/auction_ban.html', {'auction': auction})
 
 
 class AuctionBannedListView(View):

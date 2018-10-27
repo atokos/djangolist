@@ -43,7 +43,7 @@ class Auction(models.Model):
     seller = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     minimum_bid = models.DecimalField(max_digits=8, decimal_places=2)
     deadline = models.DateTimeField()
-    version = models.IntegerField(default=1)
+    version = models.IntegerField(default=0)
 
     banned = models.BooleanField(default=False)
     due = models.BooleanField(default=False)

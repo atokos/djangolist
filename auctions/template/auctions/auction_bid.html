@@ -12,6 +12,7 @@
     <form method="post" action="{% url 'auctions:bid' auction_id=auction.id%}">
         {% csrf_token %}
         {{ form.as_p }}
+        <input name="version" type="hidden" value="{{ auction.version }}">
         <input type="submit" value="{% trans "Place bid" %}">
     </form>
 {% endblock %}
