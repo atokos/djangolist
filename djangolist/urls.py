@@ -9,7 +9,7 @@ import threading
 
 from auctions import jobs
 from auctions.api import *
-from .views import generate_data
+from .views import generate_data, email_history_view
 
 
 def run_continuosly(sch, interval=1):
@@ -26,7 +26,8 @@ def run_continuosly(sch, interval=1):
 
 
 schedule.every(1).minutes.do(jobs.resolve_auction_job)
-#run_continuosly(schedule)
+schedule.every(1).minutes.do(jobs.fetch_exchange_rate_job)
+run_continuosly(schedule)
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='homepage.html'), name="homepage"),
@@ -37,6 +38,7 @@ urlpatterns = [
     path('api/auctions/', auction_list , name='api-list'),
     path('api/auctions/<int:auction_id>', auction_detail, name='api-detail'),
     path('generatedata/', generate_data, name='generatedata'),
+    path('emailhistory/', email_history_view, name='emailhistory'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

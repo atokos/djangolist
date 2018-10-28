@@ -1,11 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from auctions.models import Auction, Bid
+from djangolist import settings
 
 import random
+import os
 
 
 def generate_data(request):
@@ -30,3 +32,22 @@ def generate_data(request):
 
     messages.info(request, "Data generated")
     return redirect(reverse('homepage'))
+
+
+def email_history_view(request):
+    path = settings.EMAIL_FILE_PATH
+    data = []
+    for filename in os.listdir(path):
+        file = open(os.path.join(path, filename), 'r')
+        content = file.readlines()
+        for line in content:
+            if 'Content-Type' in line:
+                content.remove(line)
+            if 'MIME-Version' in line:
+                content.remove(line)
+            if 'Message-ID' in line:
+                content.remove(line)
+            if 'Content-Transfer-Encoding' in line:
+                content.remove(line)
+        data.append(content)
+    return render(request, 'emailhistory.html', {'data': data})

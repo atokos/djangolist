@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1>Emails</h1>
+    {% for file in data %}
+        {% for line in file %}
+            {{ line }}<br>
+        {% endfor %}
+        <br>
+    {% endfor %}
+{% endblock %}
