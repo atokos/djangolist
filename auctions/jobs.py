@@ -42,7 +42,7 @@ def resolve_auction_job():
             seller.email_user(subject, body)
 
 
-def fetch_exchange_rate_job(request):
+def fetch_exchange_rate_job():
     timestamp = str(datetime.now())
     print("[%s] Fetching currency..." % timestamp)
 
@@ -58,15 +58,15 @@ def fetch_exchange_rate_job(request):
         usd_currency.save()
 
     usd_currency = currencies[0]
-    if usd_currency.needs_update():
-        print("inside loop")
-        response = requests.get(url)
-        response_dict = response.json()
+    print(usd_currency)
 
-        usd_currency.rate = response_dict['rates']['USD']
-        usd_currency.code = 'USD'
-        usd_currency.updated.now()
-        usd_currency.save()
+    response = requests.get(url)
+    response_dict = response.json()
+
+    usd_currency.rate = response_dict['rates']['USD']
+    usd_currency.code = 'USD'
+    usd_currency.updated.now()
+    usd_currency.save()
 
 
 

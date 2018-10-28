@@ -130,11 +130,5 @@ class Currency(models.Model):
     def __str__(self):
         return self.code
 
-    def needs_update(self):
-        if timezone.now() - self.updated < timezone.timedelta(seconds=15):
-            return True
-        else:
-            return False
-
 
 

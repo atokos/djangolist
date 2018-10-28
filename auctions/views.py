@@ -1,3 +1,6 @@
+import threading
+import time
+import schedule
 from django.shortcuts import render, redirect, reverse, get_list_or_404
 from django.views import View
 from django.contrib import messages
@@ -6,6 +9,7 @@ from django.utils.translation import gettext as _
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
 
+from auctions import jobs
 from .models import Auction, Bid, Currency
 from .forms import AuctionCreateForm, AuctionsConfirmCreationForm, AuctionEditForm, AuctionBidForm
 
