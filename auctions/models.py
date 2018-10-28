@@ -111,6 +111,7 @@ class Auction(models.Model):
             self.deadline += timezone.timedelta(minutes=5)
             self.save()
 
+
 class Bid(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     auction = models.ForeignKey(Auction, default=None, on_delete=models.CASCADE)

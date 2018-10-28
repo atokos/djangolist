@@ -153,7 +153,7 @@ class AuctionBidView(View):
     def post(self, request, auction_id):
         auction = Auction.objects.get_by_id(auction_id)
         if not auction.is_active():
-            messages.error(_("The auction you tried to bid on is not available anymore"))
+            messages.error(request, _("The auction you tried to bid on is not available anymore"))
             return redirect(reverse('auctions:list'))
         if request.user == auction.seller:
             messages.error(request, _("Cannot bid on own auctions!"))

@@ -8,17 +8,16 @@ from auctions.models import Auction, Bid
 
 
 class CreateAuctionTest(TestCase):
-    fixtures = ['auction']
+    fixtures = ['auctions', 'users']
 
     def test_valid_create(self):
-        self.user = User.objects.create_user(username="testuser", password="1234")
         title = "Test title"
         description = "A test auction."
         minimum_bid = 1
         deadline = timezone.now() + timezone.timedelta(hours=73)
         deadline = deadline.strftime("%Y-%m-%d %H:%M:%S")
 
-        self.client.login(username="testuser", password="1234")
+        self.client.login(username="testuser0", password="0")
 
         response = self.client.post(reverse("auctions:create"), {"title": title,
                                                                  "description": description,
@@ -37,13 +36,12 @@ class CreateAuctionTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_invalid_time(self):
-        self.user = User.objects.create_user(username="testuser", password="1234")
         title = "Test title"
         description = "A test auction."
         minimum_bid = 1
         deadline = timezone.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        self.client.login(username="testuser", password="1234")
+        self.client.login(username="testuser0", password="0")
 
         response = self.client.post(reverse("auctions:create"), {"title": title,
                                                                  "description": description,
@@ -55,154 +53,170 @@ class CreateAuctionTest(TestCase):
 
 
 class BidOnAuctionTest(TestCase):
+    fixtures = ['auctions', 'users']
 
     def setUp(self):
-        self.seller = User.objects.create(username='seller', password='1234')
-        self.user1 = User.objects.create_user(username="testuser1", password="1234")
-        self.user2 = User.objects.create_user(username="testuser2", password="1234")
-        self.superuser = User.objects.create_superuser(username="admin", password="1234", email="test@example.com")
-        deadline = timezone.now() + timezone.timedelta(minutes=4)
-        # deadline = deadline.strftime("%Y-%m-%d %H:%M:%S")
-        self.auction = Auction.objects.create(
-            seller=self.seller,
-            title="Test",
-            description="Description",
-            minimum_bid="10",
-            deadline=deadline
-        )
-
-
-    def tearDown(self):
-        del self.auction
-        del self.seller
-        del self.user1
-        del self.user2
-        del self.superuser
+        self.user = User.objects.create_user(username='testuser', email='testuser@example.com', password='testuser')
 
     def test_valid_bid(self):
-        self.client.login(username="testuser1", password="1234")
-
-        response = self.client.get(reverse("auctions:bid", args=(self.auction.id, )))
+        self.client.login(username="testuser", password="testuser")
+        auction = Auction.objects.get_by_id(2)
+        response = self.client.get(reverse("auctions:bid", args=(auction.id, )))
         self.assertEqual(response.status_code, 200)
 
         bid_count = Bid.objects.count()
-        response = self.client.post(reverse("auctions:bid", args=(self.auction.id, )),
-                         {"bid_amount": 10.01, "version": response.context['auction'].version})
+        response = self.client.post(reverse("auctions:bid", args=(auction.id, )),
+                         {"bid_amount": 50.01, "version": response.context['auction'].version})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(bid_count + 1, Bid.objects.count())
 
-        latest_bid = Auction.objects.get_by_id(1).get_latest_bid()
-        self.assertEqual(latest_bid.bid_amount, Decimal("10.01"))
-        self.assertEqual(latest_bid.auction, self.auction)
-        self.assertEqual(latest_bid.bidder, self.user1)
+        latest_bid = Auction.objects.get_by_id(2).get_latest_bid()
+        self.assertEqual(latest_bid.bid_amount, Decimal("50.01"))
+        self.assertEqual(latest_bid.auction, auction)
+        self.assertEqual(latest_bid.bidder, self.user)
 
     def test_bid_too_low(self):
-        self.client.login(username="testuser1", password="1234")
+        self.client.login(username="testuser0", password="0")
+
+        auction = Auction.objects.get_by_id(2)
 
         bid_count = Bid.objects.count()
-        response = self.client.post(reverse("auctions:bid", args=(self.auction.id, )),
-                         {"bid_amount": 10, "version": self.auction.version})
-        self.assertEqual(bid_count, Bid.objects.count())
-
-    def test_bid_on_own_auction(self):
-        self.client.login(username="testuser1", password="1234")
-
-        bid_count = Bid.objects.count()
-        response = self.client.post(reverse("auctions:bid", args=(self.auction.id,)),
-                         {"bid_amount": 15, "version": self.auction.version})
-        self.assertEqual(bid_count + 1, Bid.objects.count())
-
-        bid_count = Bid.objects.count()
-        response = self.client.post(reverse("auctions:bid", args=(self.auction.id,)),
-                         {"bid_amount": 20, "version": self.auction.version})
+        response = self.client.post(reverse("auctions:bid", args=(auction.id, )),
+                         {"bid_amount": 50, "version": auction.version})
         self.assertEqual(bid_count, Bid.objects.count())
 
     def test_bid_on_winning_auction(self):
-        self.client.login(username="seller", password="1234")
+        self.client.login(username="testuser0", password="0")
+
+        auction = Auction.objects.get_by_id(2)
 
         bid_count = Bid.objects.count()
-        response = self.client.post(reverse("auctions:bid", args=(self.auction.id,)),
-                         {"bid_amount": 15, "version": self.auction.version})
+        response = self.client.post(reverse("auctions:bid", args=(auction.id,)),
+                         {"bid_amount": 51, "version": auction.version})
+        self.assertEqual(bid_count + 1, Bid.objects.count())
+
+        bid_count = Bid.objects.count()
+        response = self.client.post(reverse("auctions:bid", args=(auction.id,)),
+                         {"bid_amount": 52, "version": auction.version})
         self.assertEqual(bid_count, Bid.objects.count())
 
+    def test_bid_on_own_auction(self):
+        self.client.login(username="testuser0", password="0")
+
+        auction = Auction.objects.get_by_id(1)
+
+        bid_count = Bid.objects.count()
+        response = self.client.post(reverse("auctions:bid", args=(auction.id,)),
+                         {"bid_amount": 207, "version": auction.version})
+        self.assertEqual(bid_count, Bid.objects.count())
+
+
     def test_bid_on_banned(self):
-        bidder = Client()
-        admin = Client()
-        bidder.login(username="testuser1", password="1234")
-        admin.login(username="admin", password="1234")
+        self.client.login(username="testuser0", password="0")
+
+        auction = Auction.objects.get_by_id(2)
 
         # Bidder gets auction
-        response = bidder.get(reverse("auctions:bid", args=(self.auction.id,)))
+        response = self.client.get(reverse("auctions:bid", args=(auction.id,)))
         self.assertEqual(response.status_code, 200)
 
-        # Admin bans auction
-        admin.post(reverse("auctions:ban", args=(self.auction.id,)))
-        self.auction.banned = True
-        self.auction.save()
-        self.assertTrue(self.auction.banned)
+        # Auction gets banned
+        auction.banned = True
+        auction.save()
+        self.assertTrue(auction.banned)
 
         # Bidder tries to bid
         bid_count = Bid.objects.count()
-        response = bidder.post(reverse("auctions:bid", args=(self.auction.id,)),
-                         {"bid_amount": 20, "version": self.auction.version})
+        response = self.client.post(reverse("auctions:bid", args=(auction.id,)),
+                         {"bid_amount": 51, "version": auction.version})
+        self.assertEqual(bid_count, Bid.objects.count())
+
+    def test_bid_on_due(self):
+        self.client.login(username="testuser0", password="0")
+
+        auction = Auction.objects.get_by_id(2)
+
+        # Bidder gets auction
+        response = self.client.get(reverse("auctions:bid", args=(auction.id,)))
+        self.assertEqual(response.status_code, 200)
+
+        # Auction gets due
+        auction.due = True
+        auction.save()
+        self.assertTrue(auction.due)
+
+        # Bidder tries to bid
+        bid_count = Bid.objects.count()
+        response = self.client.post(reverse("auctions:bid", args=(auction.id,)),
+                         {"bid_amount": 51, "version": auction.version})
         self.assertEqual(bid_count, Bid.objects.count())
 
     def test_bid_on_edited_auction(self):
         bidder = Client()
         seller = Client()
-        bidder.login(username="testuser1", password="1234")
-        seller.login(username="seller", password="1234")
+        bidder.login(username="testuser0", password="0")
+        seller.login(username="testuser1", password="1")
+
+        auction = Auction.objects.get_by_id(2)
 
         # Bidder gets auction
-        bidder_response = bidder.get(reverse("auctions:bid", args=(self.auction.id,)))
+        bidder_response = bidder.get(reverse("auctions:bid", args=(auction.id,)))
         self.assertEqual(bidder_response.status_code, 200)
 
         # Seller edits description of auction
-        seller_response = seller.post(reverse("auctions:edit", args=(self.auction.id,)),
-                               {"description": "new description"})
-        self.assertTemplateUsed(seller_response, 'auctions/auction_edit.html')
-        self.assertEqual(self.auction.description, "new description")
+        seller_response = seller.post(reverse("auctions:edit", args=(auction.id,)),
+                                      {"description": "new description"})
+        self.assertEqual(seller_response.status_code, 302)
+        updated_auction = Auction.objects.get_by_id(2)
+        self.assertEqual(updated_auction.description, "new description")
 
         # Bidder tries to bid
         bid_count = Bid.objects.count()
-        response = self.client.post(reverse("auctions:bid", args=(self.auction.id,)),
-                                    {"bid_amount": 20, "version": bidder_response.context['auction'].version})
+        response = self.client.post(reverse("auctions:bid", args=(auction.id,)),
+                                    {"bid_amount": 51, "version": bidder_response.context['auction'].version})
         self.assertEqual(bid_count, Bid.objects.count())
 
     def test_concurrent_bidding(self):
         client1 = Client()
         client2 = Client()
-        client1.login(username="testuser1", password="1234")
-        client2.login(username="testuser2", password="1234")
+        client1.login(username="testuser6", password="6")
+        client2.login(username="testuser7", password="7")
 
         # Client 1 gets auction
-        response1 = client1.get(reverse("auctions:bid", args=(self.auction.id,)))
+        response1 = client1.get(reverse("auctions:bid", args=(2, )))
         self.assertEqual(response1.status_code, 200)
 
         # Client 2 gets auction
-        response2 = client2.get(reverse("auctions:bid", args=(self.auction.id,)))
+        response2 = client2.get(reverse("auctions:bid", args=(2, )))
         self.assertEqual(response1.status_code, 200)
 
         # Client 2 bids on auction
         bid_count = Bid.objects.count()
-        response2 = client2.post(reverse("auctions:bid", args=(self.auction.id,)),
-                                    {"bid_amount": 20, "version": response2.context['auction'].version})
+        response2 = client2.post(reverse("auctions:bid", args=(2, )),
+                                    {"bid_amount": 55, "version": response2.context['auction'].version})
         self.assertEqual(bid_count + 1, Bid.objects.count())
 
         # Client 1 tries to bid on auction after Client 2
         bid_count = Bid.objects.count()
-        response = self.client.post(reverse("auctions:bid", args=(self.auction.id,)),
-                                    {"bid_amount": 15, "version": response1.context['auction'].version},)
+        response = self.client.post(reverse("auctions:bid", args=(2,)),
+                                    {"bid_amount": 55, "version": response1.context['auction'].version},)
+        auction = Auction.objects.get_by_id(2)
+        self.assertEqual(auction.get_latest_bid_amount(), Decimal('55.00'))
         self.assertEqual(bid_count, Bid.objects.count())
 
     def test_soft_deadline(self):
-        self.client.login(username="testuser1", password="1234")
+        self.client.login(username="testuser6", password="6")
 
-        extended_deadline = self.auction.deadline + timezone.timedelta(minutes=5)
+        auction = Auction.objects.get_by_id(2)
+        auction.deadline = timezone.now() + timezone.timedelta(minutes=5)
+        auction.save()
+        extended_deadline = auction.deadline + timezone.timedelta(minutes=5)
 
         bid_count = Bid.objects.count()
-        self.client.post(reverse("auctions:bid", args=(self.auction.id,)),
-                         {"bid_amount": 15, "version": self.auction.version})
+        response = self.client.post(reverse("auctions:bid", args=(2,)),
+                         {"bid_amount": 51, "version": auction.version})
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(bid_count + 1, Bid.objects.count())
 
-        self.assertEqual(extended_deadline, self.auction.deadline)
+        auction = Auction.objects.get_by_id(2)
+        self.assertEqual(extended_deadline, auction.deadline)
